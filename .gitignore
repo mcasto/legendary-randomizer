@@ -22,3 +22,8 @@ yarn-error.log
 /.vscode
 /.zed
 tests/
+master-strike-parse/master-strike/
+master-strike-parse/legendary-randomizer-corrected.sqlite
+master-strike-parse/extracted/
+master-strike-parse/node_modules/
+master-strike-parse/package-lock.json
