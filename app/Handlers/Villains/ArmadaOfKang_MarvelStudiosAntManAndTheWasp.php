@@ -21,13 +21,13 @@ class ArmadaOfKang_MarvelStudiosAntManAndTheWasp extends BaseHandler
         $hench = $this->es->getCandidate(entityType: 'henchmen');
 
         // remove candidate
-        $this->es->removeCandidate($hench['id']);
+        $this->es->removeCandidate($hench->id);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'henchmen', entityId: $hench['id'], special: true);
+        $this->es->addToDeck($hench, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'henchmen', entityId: $hench['id']);
+        $this->addExpectation($hench);
     }
 }
 

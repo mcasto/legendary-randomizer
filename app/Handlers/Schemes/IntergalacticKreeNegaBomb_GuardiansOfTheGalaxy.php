@@ -26,11 +26,17 @@ class IntergalacticKreeNegaBomb_GuardiansOfTheGalaxy extends BaseHandler
             'name' => '6 Bystanders'
         ]);
 
+        // create mock candidate for the special entity
+        $candidate = (object)[
+            'entity_type' => 'special_entities',
+            'entity_id' => $special->id
+        ];
+
         // add to deck
-        $this->es->addToDeck(entityType: 'special_entities', entityId: $special->id, section: 'villains', special: true);
+        $this->es->addToDeck($candidate, 'villains', true);
 
         // add expectation
-        $this->addExpectation(entityType: 'special_entities', entityId: $special->id, section: 'villains');
+        $this->addExpectation($candidate, 'villains');
     }
 }
 

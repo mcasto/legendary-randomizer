@@ -29,26 +29,26 @@ class KreeSkrullWarThe_GuardiansOfTheGalaxy extends BaseHandler
         $candidate = $this->es->getCandidate(entityType: 'villains', entityId: $kree->id);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $kree->id);
+        $this->es->addToDeck($candidate);
 
         // addexp
-        $this->addExpectation(entityType: 'villains', entityId: $kree->id);
+        $this->addExpectation($candidate);
 
         // remove candidate
-        $this->es->removeCandidate($candidate['id']);
+        $this->es->removeCandidate($candidate->id);
 
         // skrulls
         $skrulls = Villain::where('name', 'Skrulls')->first();
         $candidate = $this->es->getCandidate(entityType: 'villains', entityId: $skrulls->id);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $skrulls->id);
+        $this->es->addToDeck($candidate);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $skrulls->id);
+        $this->addExpectation($candidate);
 
         // remove candidate
-        $this->es->removeCandidate($candidate['id']);
+        $this->es->removeCandidate($candidate->id);
     }
 }
 

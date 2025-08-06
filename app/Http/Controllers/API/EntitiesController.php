@@ -44,6 +44,18 @@ class EntitiesController extends ResController
         }
 
         try {
+            // Get Heroes
+            $heroes = Hero::whereIn('set', $userSets)
+                ->get(['id', 'name', 'set']);
+
+            // Get Villains
+            $villains = Villain::whereIn('set', $userSets)
+                ->get(['id', 'name', 'set']);
+
+            // Get Henchmen
+            $henchmen = Henchmen::whereIn('set', $userSets)
+                ->get(['id', 'name', 'set']);
+
             // Get Masterminds
             $masterminds = Mastermind::whereIn('set', $userSets)
                 ->get(['id', 'name', 'set']);
@@ -56,6 +68,9 @@ class EntitiesController extends ResController
             return response()->json([
                 'status' => 'success',
                 'data' => [
+                    'heroes' => $heroes,
+                    'villains' => $villains,
+                    'henchmen' => $henchmen,
                     'masterminds' => $masterminds,
                     'schemes' => $schemes,
                 ]

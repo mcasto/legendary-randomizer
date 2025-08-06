@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Setup extends Model
 {
-    protected $with = ['decks'];
+    // protected $with = ['decks']; // Temporarily disabled to prevent memory issues
     protected $guarded = [];
 
     public function candidates(): HasMany

@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class HeroColor extends Model
 {
+    protected $fillable = [
+        'hero_id',
+        'color_id'
+    ];
+
     // 1. Tell Laravel to always append these virtual attributes
     protected $appends = ['value', 'label', 'icon'];
 
@@ -33,8 +38,8 @@ class HeroColor extends Model
         );
     }
 
-    // 3. Optional: Eager load color by default
-    protected $with = ['color'];
+    // 3. Optional: Eager load color by default - temporarily disabled for memory optimization
+    // protected $with = ['color'];
 
     // Relationships
     public function hero(): BelongsTo

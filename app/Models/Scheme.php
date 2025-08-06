@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Scheme extends Model
 {
+    protected $fillable = [
+        'id',
+        'name',
+        'set',
+        'unveiled'
+    ];
+
     public function candidates()
     {
         return $this->morphMany(Candidate::class, 'entity');

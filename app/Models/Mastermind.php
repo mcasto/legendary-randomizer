@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Mastermind extends Model
 {
+    protected $fillable = [
+        'id',
+        'name',
+        'set',
+        'always_leads',
+        'handler_done'
+    ];
+
     public function candidates()
     {
         return $this->morphMany(Candidate::class, 'entity');

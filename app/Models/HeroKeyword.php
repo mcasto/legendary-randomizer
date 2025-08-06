@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HeroKeyword extends Model
 {
+    protected $fillable = [
+        'hero_id',
+        'keyword_id'
+    ];
+
     // Relationships
     public function hero(): BelongsTo
     {

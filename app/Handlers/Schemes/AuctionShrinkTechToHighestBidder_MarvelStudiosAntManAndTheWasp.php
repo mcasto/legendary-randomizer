@@ -26,22 +26,20 @@ class AuctionShrinkTechToHighestBidder_MarvelStudiosAntManAndTheWasp extends Bas
         // get sizechanging hero
         $sizer = $this->es->pullCandidate(entityType: 'heroes', keyword: 'sizechanging', take: 1);
 
+        // If no sizechanging hero found, return early
+        if (!$sizer) {
+            return;
+        }
+
         // add to heroes
-        $this->es->addToDeck(
-            candidate: $sizer,
-            special: true
-        );
+        $this->es->addToDeck($sizer, special: true);
 
         // add to villains
-        $this->es->addToDeck(
-            candidate: $sizer,
-            section: 'villains',
-            special: true
-        );
+        $this->es->addToDeck($sizer, 'villains', true);
 
         // add expectations
-        $this->addExpectation(candidate: $sizer);
-        $this->addExpectation(section: 'villains', candidate: $sizer);
+        $this->addExpectation($sizer);
+        $this->addExpectation($sizer, 'villains');
 
         // remove candidate
         $sizer->delete();

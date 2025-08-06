@@ -8,9 +8,14 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class HeroTeam extends Model
 {
+    protected $fillable = [
+        'hero_id',
+        'team_id'
+    ];
+
     protected $appends = ['value', 'label', 'icon'];
 
-    protected $with = ['team'];
+    // protected $with = ['team']; // Temporarily disabled for memory optimization
 
     protected function value(): Attribute
     {

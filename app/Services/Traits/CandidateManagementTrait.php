@@ -68,6 +68,21 @@ trait CandidateManagementTrait
     }
 
     /**
+     * Get the model class for an entity type
+     */
+    private function getModelClass(string $entityType): string
+    {
+        return match ($entityType) {
+            'heroes' => Hero::class,
+            'masterminds' => Mastermind::class,
+            'schemes' => Scheme::class,
+            'villains' => Villain::class,
+            'henchmen' => Henchmen::class,
+            default => throw new \InvalidArgumentException("Unknown entity type: {$entityType}")
+        };
+    }
+
+    /**
      * Pull candidate
      * @entityType Type of entity (schemes, masterminds, villains, henchmen, heroes)
      * @name Name of entity to pull from candidates (can be regex pattern)
@@ -82,7 +97,8 @@ trait CandidateManagementTrait
             ->where('entity_type', $entityType);
 
         if ($name) {
-            $query->whereHasMorph('entity', [$entityType], function ($query) use ($isRegex, $name) {
+            $modelClass = $this->getModelClass($entityType);
+            $query->whereHasMorph('entity', [$modelClass], function ($query) use ($isRegex, $name) {
                 if ($isRegex) {
                     $query->where('name', 'regexp', $name);
                 } else {
@@ -92,14 +108,22 @@ trait CandidateManagementTrait
         }
 
         if ($keyword) {
-            $query->whereHas('hero_keywords.keyword', function ($query) use ($keyword) {
-                $query->where('value', $keyword);
+            $query->whereHasMorph('entity', [Hero::class], function ($query) use ($keyword) {
+                $query->whereHas('hero_keywords', function ($subQuery) use ($keyword) {
+                    $subQuery->whereHas('keyword', function ($keywordQuery) use ($keyword) {
+                        $keywordQuery->where('value', $keyword);
+                    });
+                });
             });
         }
 
         if ($team) {
-            $query->whereHas('hero_teams', function ($query) use ($team) {
-                $query->where('value', $team);
+            $query->whereHasMorph('entity', [Hero::class], function ($query) use ($team) {
+                $query->whereHas('hero_teams', function ($subQuery) use ($team) {
+                    $subQuery->whereHas('team', function ($teamQuery) use ($team) {
+                        $teamQuery->where('value', $team);
+                    });
+                });
             });
         }
 

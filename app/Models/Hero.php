@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Hero extends Model
 {
-    protected $with = ['hero_colors', 'hero_teams', 'hero_keywords.keyword'];
+    protected $fillable = [
+        'id',
+        'name',
+        'set',
+        'rules_text',
+        'set_id'
+    ];
+
+    // Eager loading disabled for memory optimization - relationships loaded manually in OutputDeckService
+    // protected $with = ['hero_colors', 'hero_teams', 'hero_keywords'];
 
     public function candidates()
     {

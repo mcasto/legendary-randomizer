@@ -13,9 +13,10 @@ class TeamService
      */
     public static function getTeams($setup, $minCount)
     {
-        // get candidate heroes
+        // get candidate heroes with their team relationships
         $candidateHeroes = Candidate::where('setup_id', $setup->id)
             ->where('entity_type', 'heroes')
+            ->with(['entity.hero_teams'])
             ->inRandomOrder()
             ->get();
 

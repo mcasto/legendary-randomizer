@@ -27,13 +27,13 @@ class OrganizedCrimeWave_DarkCity extends BaseHandler
         $candidate = $this->es->getCandidate(entityType: 'henchmen', entityId: $goons->id);
 
         // remove candidate
-        $this->es->removeCandidate($candidate['id']);
+        $this->es->removeCandidate($candidate->id);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'henchmen', entityId: $goons->id);
+        $this->es->addToDeck($candidate);
 
         // add expectation
-        $this->addExpectation(entityType: 'henchmen', entityId: $goons->id);
+        $this->addExpectation($candidate);
     }
 }
 

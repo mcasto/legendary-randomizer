@@ -45,6 +45,11 @@ abstract class BaseHandler  // Make it abstract
 
     public function getAlwaysLeads($candidate)
     {
+        // Load the entity if not already loaded
+        if (!$candidate->relationLoaded('entity')) {
+            $candidate->load('entity');
+        }
+
         $alwaysLeads = $candidate->entity->always_leads;
 
         $villain = Villain::where('name', $alwaysLeads)
@@ -66,6 +71,7 @@ abstract class BaseHandler  // Make it abstract
     {
         $candidates = Candidate::where('setup_id', $this->setup->id)
             ->where('entity_type', 'masterminds')
+            ->with('entity')
             ->inRandomOrder()
             ->get();
 

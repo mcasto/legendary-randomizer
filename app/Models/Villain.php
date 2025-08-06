@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Villain extends Model
 {
-    protected $with = ['villain_keywords.keyword'];
+    protected $fillable = [
+        'id',
+        'name',
+        'set',
+        'unveiled'
+    ];
+
+    // Eager loading disabled for memory optimization - relationships loaded manually in OutputDeckService
+    // protected $with = ['villain_keywords'];
 
     public function candidates()
     {

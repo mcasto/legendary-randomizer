@@ -24,6 +24,7 @@ class AlienBroodEncounters_XMen extends BaseHandler
         $this->setup->henchmen++;
 
         $brood = $this->es->pullCandidate(entityType: 'henchmen', name: 'Brood, The');
+        $brood = $brood->first();
 
         // add to deck
         $this->es->addToDeck($brood);
