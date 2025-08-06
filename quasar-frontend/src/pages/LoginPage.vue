@@ -1,0 +1,41 @@
+<template>
+  <div class="flex justify-center q-pt-xl">
+    <div style="width: 260px;" class="flex column align-middle">
+      <q-img src="/legendary-logo.png"></q-img>
+      <div class="q-mt-xl">
+        <q-form @submit="store.login({ email, password })">
+          <div class="column q-gutter-y-sm">
+            <q-input
+              type="text"
+              label="Email"
+              v-model="email"
+              dense
+              outlined
+            ></q-input>
+            <q-input
+              type="text"
+              label="Password"
+              v-model="password"
+              dense
+              outlined
+            ></q-input>
+            <div class="flex justify-end">
+              <q-btn type="submit" label="Login" color="primary"></q-btn>
+            </div>
+          </div>
+        </q-form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { useStore } from "src/stores/store";
+import { ref } from "vue";
+const isDev = import.meta.env.DEV;
+
+const store = useStore();
+
+const email = ref(isDev ? "castoware@gmail.com" : null);
+const password = ref(isDev ? "lovemeg0524" : null);
+</script>
