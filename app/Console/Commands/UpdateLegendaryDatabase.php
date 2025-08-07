@@ -494,7 +494,7 @@ class UpdateLegendaryDatabase extends Command
         }
 
         try {
-            $response = Http::timeout(30)->post($this->apiBaseUrl . '/auth/login', [
+            $response = Http::timeout(30)->post($this->apiBaseUrl . '/login', [
                 'email' => $email,
                 'password' => $password,
             ]);
@@ -534,7 +534,7 @@ class UpdateLegendaryDatabase extends Command
         try {
             $response = Http::withToken($this->authToken)
                 ->timeout(10)
-                ->post($this->apiBaseUrl . '/auth/logout');
+                ->post($this->apiBaseUrl . '/logout');
 
             if ($response->successful()) {
                 $this->line('  Logged out from production API');
