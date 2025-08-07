@@ -17,14 +17,15 @@ class UpdateLegendaryDatabase extends Command
     protected $signature = 'legendary:update-database
                           {--dry-run : Show what would be updated without making changes}
                           {--force : Skip confirmation prompts}
-                          {--local : Update local database instead of remote}';
+                          {--local : Test API endpoints locally instead of remote}
+                          {--direct : Update local database directly (skip API endpoints)}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update the Legendary Randomizer database with latest master-strike data, including duplicate entities';
+    protected $description = 'Update the Legendary Randomizer database with latest master-strike data, including duplicate entities. Use --direct for local DB updates, --local for testing local API endpoints, or no flags for remote API updates.';
 
     /**
      * Configuration
@@ -60,16 +61,23 @@ class UpdateLegendaryDatabase extends Command
             return 1;
         }
 
-        // Determine update mode
-        $isLocalUpdate = $this->option('local') || empty($this->apiBaseUrl);
+        // Determine update mode and API URL
+        $isDirectUpdate = $this->option('direct') || (empty($this->apiBaseUrl) && empty(env('LEGENDARY_LOCAL_BASE_URL')));
 
-        if ($isLocalUpdate) {
-            $this->info('📍 Local database update mode');
+        if ($this->option('local') && env('LEGENDARY_LOCAL_BASE_URL')) {
+            // Local API testing mode
+            $this->apiBaseUrl = env('LEGENDARY_LOCAL_BASE_URL');
+            $isDirectUpdate = false; // Use API mode but with local endpoints
+            $this->info('🧪 Local API testing mode');
+            $this->line('Local API Base URL: ' . $this->apiBaseUrl);
+        } elseif ($isDirectUpdate || $this->option('direct')) {
+            // Direct database update mode (original behavior)
+            $this->info('📍 Direct database update mode');
         } else {
+            // Remote API mode
             $this->info('🌐 Remote database update mode');
             $this->line('API Base URL: ' . $this->apiBaseUrl);
         }
-
         try {
             // Step 1: Clone repository
             if (!$this->cloneRepository()) {
@@ -86,8 +94,8 @@ class UpdateLegendaryDatabase extends Command
                 return 1;
             }
 
-            // Step 4: Update database (local or remote)
-            if ($isLocalUpdate) {
+            // Step 4: Update database (direct or via API)
+            if ($isDirectUpdate) {
                 if (!$this->updateMariaDB()) {
                     return 1;
                 }
@@ -98,7 +106,7 @@ class UpdateLegendaryDatabase extends Command
             }
 
             // Step 5: Verify results
-            if ($isLocalUpdate) {
+            if ($isDirectUpdate) {
                 $this->verifyResults();
             }
 

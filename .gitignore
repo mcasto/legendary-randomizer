@@ -28,3 +28,6 @@ master-strike-parse/extracted/
 master-strike-parse/json-export/
 master-strike-parse/node_modules/
 master-strike-parse/package-lock.json
+master-strike-parse/my-parser-scripts/
+*.nedb
+.DS_Store
