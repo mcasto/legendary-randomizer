@@ -150,6 +150,42 @@ function extractEntities() {
     return null;
   }
 
+  // Helper function to parse TypeScript file content and extract the data
+  function parseTypeScriptFile(filePath) {
+    try {
+      const content = fs.readFileSync(filePath, "utf8");
+
+      // This is a simplified parser - we'll use eval in a controlled way
+      // Remove imports and replace with empty objects for missing types
+      let processedContent = content
+        .replace(/import.*from.*;\s*\n/g, "")
+        .replace(/export\s+const\s+(\w+):\s*CardSetDef\s*=/, "const $1 =")
+        .replace(/CardSetDef/g, "any");
+
+      // Add the variable to make it available
+      processedContent +=
+        '\nif (typeof module !== "undefined") { module.exports = { data: ' +
+        (content.match(/export\s+const\s+(\w+):/)?.[1] || "undefined") +
+        " }; }";
+
+      // Create a temporary file and require it
+      const tempFile = path.join(__dirname, "temp-" + Date.now() + ".js");
+      fs.writeFileSync(tempFile, processedContent);
+
+      try {
+        const result = require(tempFile);
+        fs.unlinkSync(tempFile); // Clean up
+        return result.data;
+      } catch (e) {
+        fs.unlinkSync(tempFile); // Clean up even on error
+        throw e;
+      }
+    } catch (error) {
+      console.error(`Error parsing ${filePath}:`, error.message);
+      return null;
+    }
+  }
+
   const cardFiles = fs.readdirSync(cardsDir).filter((f) => f.endsWith(".ts"));
   const allEntities = {
     heroes: [],
@@ -158,6 +194,51 @@ function extractEntities() {
     henchmen: [],
     schemes: [],
     bystanders: [],
+  };
+
+  // Set ID to value mapping (based on Laravel database structure)
+  const setIdToValueMap = {
+    1: "coreset",
+    2: "promo",
+    3: "darkcity",
+    4: "ff",
+    5: "pttr",
+    6: "gotg",
+    7: "xmen",
+    8: "sw1",
+    9: "3d",
+    10: "captainamerica",
+    11: "deadpool",
+    12: "noir",
+    13: "sw2",
+    14: "villains",
+    15: "civilwar",
+    16: "realmofkings",
+    17: "revelations",
+    18: "doctorstrange",
+    19: "champions",
+    20: "fearitself",
+    21: "wwhulk",
+    22: "antman",
+    23: "dimensions",
+    24: "blackwidow",
+    25: "blackpanther",
+    26: "venom",
+    27: "spiderhomecoming",
+    28: "heroesofasgard",
+    29: "intothecosmos",
+    30: "shield",
+    31: "midnightsons",
+    32: "weaponx",
+    33: "newmutants",
+    34: "messiahcomplex",
+    35: "annihilation",
+    36: "msaw",
+    37: "msgotg",
+    38: "msis",
+    39: "mswi",
+    40: "marvelstudios",
+    41: "2099",
   };
 
   let totalDuplicates = 0;
@@ -169,9 +250,13 @@ function extractEntities() {
     const setId = filename.replace(".ts", "");
 
     try {
-      const content = fs.readFileSync(filePath, "utf8");
+      const data = parseTypeScriptFile(filePath);
+      if (!data) {
+        logWarning(`Failed to parse ${filename}`);
+        return;
+      }
 
-      // Extract entities using regex patterns
+      // Process each entity type and handle duplicates
       const entityTypes = [
         "heroes",
         "masterminds",
@@ -180,107 +265,44 @@ function extractEntities() {
         "schemes",
         "bystanders",
       ];
-      const fileEntities = {};
 
       entityTypes.forEach((type) => {
-        const pattern = new RegExp(
-          `export const ${type}:\\s*\\[([\\s\\S]*?)\\];`,
-          "gm"
-        );
-        const match = pattern.exec(content);
-
-        if (match) {
-          const entitiesText = match[1];
-          const entities = [];
-
-          // Parse individual entities
-          const entityPattern = /\{([^}]+)\}/g;
-          let entityMatch;
-
-          while ((entityMatch = entityPattern.exec(entitiesText)) !== null) {
-            const entityText = entityMatch[1];
-
-            // Extract entity properties
-            const entity = { set: setId };
-
-            // Extract name
-            const nameMatch = entityText.match(/name:\s*['"`]([^'"`]+)['"`]/);
-            if (nameMatch) entity.name = nameMatch[1];
-
-            // Extract id
-            const idMatch = entityText.match(/id:\s*['"`]([^'"`]+)['"`]/);
-            if (idMatch) entity.id = idMatch[1];
-
-            // Extract set array if it exists
-            const setMatch = entityText.match(/set:\s*\[([^\]]+)\]/);
-            if (setMatch) {
-              const sets = setMatch[1]
-                .split(",")
-                .map((s) => s.trim().replace(/['"`]/g, ""));
-              entity.sets = sets;
-              entity.set = sets; // Keep both for compatibility
-            }
-
-            // Extract cards
-            const cardsMatch = entityText.match(/cards:\s*\[([^\]]+)\]/);
-            if (cardsMatch) {
-              const cards = cardsMatch[1]
-                .split(",")
-                .map((s) => s.trim().replace(/['"`]/g, ""));
-              entity.cards = cards;
-            }
-
-            // Extract other common properties
-            const props = [
-              "always_leads",
-              "team",
-              "keywords",
-              "attackRequirement",
-            ];
-            props.forEach((prop) => {
-              const propMatch = entityText.match(
-                new RegExp(`${prop}:\\s*['"\`]([^'"\`]+)['"\`]`)
+        if (data[type] && Array.isArray(data[type])) {
+          data[type].forEach((entity) => {
+            if (
+              entity.set &&
+              Array.isArray(entity.set) &&
+              entity.set.length > 1
+            ) {
+              // This entity appears in multiple sets - create duplicates
+              const setValues = entity.set.map(
+                (setId) => setIdToValueMap[setId] || setId
               );
-              if (propMatch) entity[prop] = propMatch[1];
-            });
-
-            if (entity.name) {
-              entities.push(entity);
+              entity.set.forEach((setIdNum) => {
+                const duplicateEntity = { ...entity };
+                // Use set VALUE, not set ID
+                duplicateEntity.set = setIdToValueMap[setIdNum] || setIdNum;
+                duplicateEntity.set_name =
+                  setIdToValueMap[setIdNum] || setIdNum; // For compatibility
+                delete duplicateEntity.sets; // Remove the array if it exists
+                allEntities[type].push(duplicateEntity);
+                totalDuplicates++;
+              });
+              log(
+                `    🎯 DUPLICATE: ${entity.name} → sets: ${setValues.join(
+                  ", "
+                )} (IDs: ${entity.set.join(", ")})`,
+                colors.yellow
+              );
+            } else {
+              // Regular entity
+              const singleEntity = { ...entity };
+              // Use the file set value (filename), not ID
+              singleEntity.set = setId;
+              allEntities[type].push(singleEntity);
             }
-          }
-
-          fileEntities[type] = entities;
+          });
         }
-      });
-
-      // Process each entity type and handle duplicates
-      Object.entries(fileEntities).forEach(([type, entities]) => {
-        entities.forEach((entity) => {
-          if (
-            entity.sets &&
-            Array.isArray(entity.sets) &&
-            entity.sets.length > 1
-          ) {
-            // This entity appears in multiple sets - create duplicates
-            entity.sets.forEach((setNum) => {
-              const duplicateEntity = { ...entity };
-              duplicateEntity.set = setNum;
-              duplicateEntity.set_name = setNum; // For compatibility
-              delete duplicateEntity.sets; // Remove the array
-              allEntities[type].push(duplicateEntity);
-              totalDuplicates++;
-            });
-            log(
-              `    🎯 DUPLICATE: ${entity.name} → sets: ${entity.sets.join(
-                ", "
-              )}`,
-              colors.yellow
-            );
-          } else {
-            // Regular entity
-            allEntities[type].push(entity);
-          }
-        });
       });
 
       log(`📁 ${filename} processed`);
@@ -425,7 +447,8 @@ while ($duplicate = $duplicatesQuery->fetchArray(SQLITE3_ASSOC)) {
             $recordsToAdd[] = [
                 'table' => $tableName,
                 'name' => $duplicate['name'],
-                'set' => $setName
+                'set' => $setName,
+                'entity_id' => $duplicate['entity_id']
             ];
         }
     }
@@ -475,7 +498,7 @@ try {
 
         DB::table($record['table'])->insert($insertData);
 
-        echo "  ✅ Added {$record['name']} to {$record['table']} (ID: {$maxIds[$record['table']]}, set: {$record['set']})\\n";
+        echo "  ✅ Added {$record['name']} to {$record['table']} (ID: {$maxIds[$record['table']]}, set: {$record['set']}, entity_id: {$record['entity_id']})\\n";
     }
 
     DB::commit();
