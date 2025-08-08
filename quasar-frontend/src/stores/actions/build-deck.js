@@ -8,10 +8,6 @@ export default (numPlayers) => {
 
   const route = store.router.currentRoute.value;
 
-  console.log({
-    route,
-  });
-
   Loading.show();
 
   let path = `/build-deck/${numPlayers}`;

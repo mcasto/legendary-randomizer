@@ -13,6 +13,14 @@ const routes = [
         component: () => import("pages/IndexPage.vue"),
         meta: { requireAuth: true },
         name: "index",
+        beforeEnter: async () => {
+          const store = useStore();
+          store.settings = await callApi({
+            path: "/user-settings",
+            method: "get",
+            useAuth: true,
+          });
+        },
       },
       {
         path: "login",

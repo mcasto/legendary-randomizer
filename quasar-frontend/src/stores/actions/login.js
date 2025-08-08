@@ -21,8 +21,6 @@ export default ({ email, password }) => {
     store.token = response.token;
     store.view = store.user.default_view;
 
-    console.log({ response });
-
     if (response.status == "success") {
       store.router.push({ name: "index" });
     }

@@ -29,6 +29,12 @@ class DatabaseSeeder extends Seeder
             SchemeSeeder::class,
             VillainSeeder::class,
             DefaultSetupSeeder::class,
+            MastermindDisplaySeeder::class,
+            SchemeDisplaySeeder::class,
+            VillainDisplaySeeder::class,
+            HenchmenDisplaySeeder::class,
+            HeroDisplaySeeder::class,
+            UserSettingsSeeder::class,
         ]);
     }
 }

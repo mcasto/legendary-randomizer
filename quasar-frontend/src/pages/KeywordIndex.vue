@@ -63,8 +63,6 @@ import KeywordDialog from "src/components/KeywordDialog.vue";
 
 const store = useStore();
 
-console.log({ keywords: store.keywords });
-
 const filter = ref(null);
 
 const dialog = ref({

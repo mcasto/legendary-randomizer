@@ -1,6 +1,9 @@
 <template>
   <div class="full-width">
-    <q-list separator>
+    <q-list
+      separator
+      :style="`background-color:${store.settings.displays.heroes.bg}; color:${store.settings.displays.heroes.text}`"
+    >
       <q-item
         v-for="hero of store.game.deck.heroes.filter((hero) => hero)"
         :key="`hero-${hero.id}`"
@@ -61,6 +64,4 @@ import { useStore } from "src/stores/store";
 import IconDisplay from "./IconDisplay.vue";
 
 const store = useStore();
-
-console.log({ game: store.game });
 </script>

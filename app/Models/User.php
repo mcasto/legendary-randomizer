@@ -47,4 +47,72 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the user settings for this user's data_id.
+     */
+    public function userSettings()
+    {
+        return $this->hasOne(UserSettings::class, 'user_data_id', 'data_id');
+    }
+
+    /**
+     * Get the mastermind display settings for this user's data_id.
+     */
+    public function mastermindDisplay()
+    {
+        return $this->hasOne(MastermindDisplay::class, 'user_data_id', 'data_id');
+    }
+
+    /**
+     * Get the scheme display settings for this user's data_id.
+     */
+    public function schemeDisplay()
+    {
+        return $this->hasOne(SchemeDisplay::class, 'user_data_id', 'data_id');
+    }
+
+    /**
+     * Get the villain display settings for this user's data_id.
+     */
+    public function villainDisplay()
+    {
+        return $this->hasOne(VillainDisplay::class, 'user_data_id', 'data_id');
+    }
+
+    /**
+     * Get the henchmen display settings for this user's data_id.
+     */
+    public function henchmenDisplay()
+    {
+        return $this->hasOne(HenchmenDisplay::class, 'user_data_id', 'data_id');
+    }
+
+    /**
+     * Get the hero display settings for this user's data_id.
+     */
+    public function heroDisplay()
+    {
+        return $this->hasOne(HeroDisplay::class, 'user_data_id', 'data_id');
+    }
+
+    /**
+     * Get all display settings for this user's data_id.
+     */
+    public function settings()
+    {
+        // Get all display settings
+        $displays = [
+            'masterminds' => $this->mastermindDisplay,
+            'schemes' => $this->schemeDisplay,
+            'villains' => $this->villainDisplay,
+            'henchmen' => $this->henchmenDisplay,
+            'heroes' => $this->heroDisplay,
+        ];
+
+        return [
+            'settings' => $this->userSettings,
+            'displays' => $displays,
+        ];
+    }
 }

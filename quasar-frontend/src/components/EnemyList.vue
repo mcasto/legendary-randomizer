@@ -1,10 +1,13 @@
 <template>
-  <div class="q-px-sm q-pt-sm" :class="`bg-${color}`">
+  <div
+    class="q-px-sm q-pt-sm"
+    :style="`background-color:${bg}; color:${text};`"
+  >
     <div class="text-subtitle2">
       {{ label }}
     </div>
     <div>
-      <q-list dense separator>
+      <q-list dense>
         <q-item v-for="enemy of enemies" :key="`${label}-${enemy.id}`">
           <q-item-section side>
             <q-icon
@@ -34,7 +37,7 @@
 import { useStore } from "src/stores/store";
 import { computed } from "vue";
 
-const props = defineProps(["label", "enemies", "color"]);
+const props = defineProps(["label", "enemies", "bg", "text"]);
 
 const store = useStore();
 

@@ -12,11 +12,12 @@ export const useStore = defineStore(
       entities: ref(null),
       game: ref(null),
       keywords: ref(null),
-      user: ref(null),
+      settings: ref(null),
       specMastermind: ref(null),
       specScheme: ref(null),
-      view: ref(null),
       token: ref(null),
+      user: ref(null),
+      view: ref(null),
     };
     const getters = {};
     const actions = {
