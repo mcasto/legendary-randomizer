@@ -1,8 +1,6 @@
 DirectoryIndex index.html
 RewriteEngine On
 
-# TEST
-
 # 1. Handle static files first
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
