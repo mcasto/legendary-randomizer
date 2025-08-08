@@ -38,6 +38,17 @@
                     </q-item-label>
                   </q-item-section>
                 </q-item>
+
+                <q-item clickable :to="{ name: 'user-settings' }">
+                  <q-item-section avatar>
+                    <q-icon name="settings" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>
+                      User Settings
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
               </q-list>
             </q-menu>
           </q-btn>

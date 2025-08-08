@@ -97,6 +97,24 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the sets owned by this user's data_id.
+     */
+    public function userSets()
+    {
+        return $this->hasMany(HasSet::class, 'data_id', 'data_id');
+    }
+
+    /**
+     * Get the sets owned by this user's data_id with full set information.
+     */
+    public function setsWithDetails()
+    {
+        return $this->userSets()->join('sets', 'has_sets.set_value', '=', 'sets.value')
+            ->select('sets.id', 'sets.value', 'sets.label')
+            ->orderBy('sets.label');
+    }
+
+    /**
      * Get all display settings for this user's data_id.
      */
     public function settings()
@@ -110,7 +128,20 @@ class User extends Authenticatable
             'heroes' => $this->heroDisplay,
         ];
 
+        // Sort displays by their order field
+        uasort($displays, function ($a, $b) {
+            if ($a === null && $b === null) return 0;
+            if ($a === null) return 1;
+            if ($b === null) return -1;
+            return $a->order <=> $b->order;
+        });
+
+        // Get user's sets with full details
+        $sets = $this->setsWithDetails()->get()->toArray();
+
         return [
+            'status' => 'success',
+            'sets' => $sets,
             'settings' => $this->userSettings,
             'displays' => $displays,
         ];

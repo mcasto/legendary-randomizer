@@ -73,6 +73,44 @@ const routes = [
           store.keywords = response.data;
         },
       },
+      {
+        path: "user-settings",
+        component: () => import("pages/UserSettings.vue"),
+        meta: { requireAuth: true },
+        name: "user-settings",
+        beforeEnter: async () => {
+          const store = useStore();
+          const sets = await callApi({
+            path: "/sets",
+            method: "get",
+            useAuth: true,
+          });
+
+          if (sets.status != "success") {
+            Notify.create({
+              type: "negative",
+              message: `Error ${sets.error.status}: ${sets.error.json.message}`,
+            });
+          }
+
+          store.sets = sets.data;
+
+          const response = await callApi({
+            path: "/user-settings",
+            method: "get",
+            useAuth: true,
+          });
+
+          if (response.status != "success") {
+            Notify.create({
+              type: "negative",
+              message: `Error ${response.error.status}: ${response.error.json.message}`,
+            });
+          }
+
+          store.settings = response;
+        },
+      },
     ],
   },
 

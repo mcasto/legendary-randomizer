@@ -4,7 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EntitiesController;
 use App\Http\Controllers\BuildDeckController;
 use App\Http\Controllers\KeywordController;
-use App\Models\User;
+use App\Http\Controllers\SetController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -46,3 +46,15 @@ Route::get('/user-settings', function () {
 })
     ->middleware('auth:sanctum')
     ->name('user.settings');
+
+Route::get('/sets', [SetController::class, 'index'])
+    ->middleware('auth:sanctum')
+    ->name('sets.index');
+
+Route::put('/sets/{set_value}/add', [SetController::class, 'addSet'])
+    ->middleware('auth:sanctum')
+    ->name('sets.add');
+
+Route::put('/sets/{set_value}/remove', [SetController::class, 'removeSet'])
+    ->middleware('auth:sanctum')
+    ->name('sets.remove');

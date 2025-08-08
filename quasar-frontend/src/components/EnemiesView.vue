@@ -26,5 +26,4 @@ const displays = Object.entries(store.settings.displays)
   })
   .sort((a, b) => a.order - b.order);
 
-console.log({ displays });
 </script>
