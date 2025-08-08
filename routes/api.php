@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EntitiesController;
 use App\Http\Controllers\BuildDeckController;
+use App\Http\Controllers\KeywordController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -33,3 +34,7 @@ Route::post('/verify-token', function (Request $request): JsonResponse {
 })
     ->middleware('auth:sanctum')
     ->name('verify-token');
+
+Route::get('/keywords', [KeywordController::class, 'index'])
+    ->middleware('auth:sanctum')
+    ->name('keywords.index');

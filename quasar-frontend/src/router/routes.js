@@ -1,3 +1,4 @@
+import { before } from "lodash-es";
 import { Notify } from "quasar";
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
@@ -39,6 +40,29 @@ const routes = [
           }
 
           store.entities = response.data;
+        },
+      },
+      {
+        path: "keyword-index",
+        component: () => import("pages/KeywordIndex.vue"),
+        meta: { requireAuth: true },
+        name: "keyword-index",
+        beforeEnter: async () => {
+          const store = useStore();
+          const response = await callApi({
+            path: "/keywords",
+            method: "get",
+            useAuth: true,
+          });
+
+          if (response.status != "success") {
+            Notify.create({
+              type: "negative",
+              message: `Error ${response.error.status}: ${response.error.json.message}`,
+            });
+          }
+
+          store.keywords = response.data;
         },
       },
     ],

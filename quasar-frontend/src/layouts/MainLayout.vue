@@ -27,6 +27,17 @@
                     </q-item-label>
                   </q-item-section>
                 </q-item>
+
+                <q-item clickable :to="{ name: 'keyword-index' }">
+                  <q-item-section avatar>
+                    <q-icon name="key" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>
+                      Keyword Index
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
               </q-list>
             </q-menu>
           </q-btn>
