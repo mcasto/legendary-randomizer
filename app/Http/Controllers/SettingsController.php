@@ -14,6 +14,7 @@ class SettingsController extends Controller
 {
     public function update(Request $request): void
     {
+
         $models = [
             'heroes' => HeroDisplay::class,
             'masterminds' => MastermindDisplay::class,

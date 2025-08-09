@@ -1,17 +1,9 @@
 <template>
   <div>
-    <q-toolbar>
-      <q-toolbar-title>
-        Layout
-      </q-toolbar-title>
-    </q-toolbar>
-
     <q-list separator ref="listRef">
       <q-item
         v-for="(section, index) in sectionsData"
         :key="section.key"
-        clickable
-        v-ripple
         :style="`background-color:${section.bg || '#ffffff'}; color:${
           section.text || '#000000'
         }`"
@@ -22,11 +14,25 @@
         <q-item-section>
           <q-item-label>{{ section.label }}</q-item-label>
         </q-item-section>
-        <q-item-section side>
-          <!--  -->
+        <q-item-section avatar>
+          <q-btn
+            icon="mdi-palette"
+            flat
+            round
+            dense
+            @click="openColorPicker(section)"
+          >
+          </q-btn>
         </q-item-section>
       </q-item>
     </q-list>
+
+    <color-picker
+      v-model="colorModel"
+      :visible="colorVisible"
+      @update="updateDisplays"
+      @close="colorVisible = false"
+    ></color-picker>
   </div>
 </template>
 
@@ -37,11 +43,14 @@ import { ref } from "vue";
 import { useSortable } from "@vueuse/integrations/useSortable";
 import { clone } from "lodash-es";
 import callApi from "src/assets/call-api";
+import ColorPicker from "./ColorPicker.vue";
 
 const store = useStore();
 
 const listRef = ref();
 const sectionsData = ref([]);
+const colorModel = ref("null");
+const colorVisible = ref(false);
 
 // Initialize sectionsData from store once
 const initializeSections = () => {
@@ -92,6 +101,8 @@ const updateDisplays = async () => {
     if (store.settings.displays[section.key]) {
       const newOrder = index + 1;
       store.settings.displays[section.key].order = newOrder;
+      store.settings.displays[section.key].bg = section.bg;
+      store.settings.displays[section.key].text = section.text;
     }
   });
 
@@ -103,6 +114,11 @@ const updateDisplays = async () => {
     payload: settings,
     useAuth: true,
   });
+};
+
+const openColorPicker = (section) => {
+  colorVisible.value = true;
+  colorModel.value = section;
 };
 </script>
 
