@@ -5,6 +5,7 @@ use App\Http\Controllers\API\EntitiesController;
 use App\Http\Controllers\BuildDeckController;
 use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\SetController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -58,3 +59,7 @@ Route::put('/sets/{set_value}/add', [SetController::class, 'addSet'])
 Route::put('/sets/{set_value}/remove', [SetController::class, 'removeSet'])
     ->middleware('auth:sanctum')
     ->name('sets.remove');
+
+Route::put('/settings', [SettingsController::class, 'update'])
+    ->middleware('auth:sanctum')
+    ->name('update-settings');
