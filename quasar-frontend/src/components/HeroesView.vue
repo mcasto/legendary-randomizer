@@ -2,10 +2,12 @@
   <div class="full-width">
     <q-list
       separator
-      :style="`background-color:${store.settings.displays.heroes.bg}; color:${store.settings.displays.heroes.text}`"
+      :style="`background-color:${
+        store.settings?.displays?.heroes?.bg || '#ffffff'
+      }; color:${store.settings?.displays?.heroes?.text || '#000000'}`"
     >
       <q-item
-        v-for="hero of store.game.deck.heroes.filter((hero) => hero)"
+        v-for="hero of (store.game?.deck?.heroes || []).filter((hero) => hero)"
         :key="`hero-${hero.id}`"
       >
         <q-item-section side>

@@ -4,7 +4,7 @@
       v-for="display in displays"
       :key="display.key"
       :label="display.label"
-      :enemies="store.game.deck[display.key]"
+      :enemies="store.game?.deck?.[display.key] || []"
       :bg="display.bg"
       :text="display.text"
       class="q-mb-xs"
@@ -18,12 +18,11 @@ import EnemyList from "./EnemyList.vue";
 import { startCase } from "lodash-es";
 
 const store = useStore();
-const displays = Object.entries(store.settings.displays)
+const displays = Object.entries(store.settings?.displays || {})
   .filter(([key, value]) => key != "heroes")
   .map(([key, value]) => {
     const label = startCase(key);
     return { key, label, ...value };
   })
-  .sort((a, b) => a.order - b.order);
-
+  .sort((a, b) => (a.order || 0) - (b.order || 0));
 </script>
