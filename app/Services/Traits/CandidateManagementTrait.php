@@ -9,11 +9,90 @@ use App\Models\Villain;
 use App\Models\Henchmen;
 use App\Models\Hero;
 use App\Models\HasSet;
+use App\Models\PlayedCount;
+use App\Models\UserSettings;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 trait CandidateManagementTrait
 {
+    /**
+     * Get user settings for the current data_id
+     */
+    private function getUserSettings(): ?UserSettings
+    {
+        return UserSettings::where('user_data_id', $this->setup['data_id'])->first();
+    }
+
+    /**
+     * Get played counts for entities, grouped by entity_type and entity_id
+     */
+    private function getPlayedCounts(string $entityType): array
+    {
+        $counts = PlayedCount::where('data_id', $this->setup['data_id'])
+            ->where('entity_type', $entityType)
+            ->select('entity_id', DB::raw('COUNT(*) as count'))
+            ->groupBy('entity_id')
+            ->pluck('count', 'entity_id')
+            ->toArray();
+
+        return $counts;
+    }
+
+    /**
+     * Filter out epic masterminds if use_epics is disabled
+     */
+    private function filterEpicMasterminds($query, UserSettings $userSettings = null)
+    {
+        if ($userSettings && !$userSettings->use_epics) {
+            $query->whereHasMorph('entity', [Mastermind::class], function ($query) {
+                $query->where('name', 'NOT LIKE', '%Epic%');
+            });
+        }
+        return $query;
+    }
+
+    /**
+     * Apply weighted random ordering based on played counts
+     */
+    private function applyWeightedRandomOrder($candidates, string $entityType)
+    {
+        $userSettings = $this->getUserSettings();
+
+        if (!$userSettings || !$userSettings->use_played_count) {
+            return $candidates->shuffle();
+        }
+
+        $playedCounts = $this->getPlayedCounts($entityType);
+
+        // If no played counts exist, use regular random order
+        if (empty($playedCounts)) {
+            return $candidates->shuffle();
+        }
+
+        // Create a weighted random ordering
+        // Lower played counts get higher weights (inverse relationship)
+        $maxCount = max($playedCounts) + 1; // Add 1 to avoid zero weights
+
+        // Calculate weights and sort
+        $weightedCandidates = $candidates->map(function ($candidate) use ($playedCounts, $maxCount) {
+            $playCount = $playedCounts[$candidate->entity_id] ?? 0;
+            // Inverse weight: less played = higher weight
+            $weight = $maxCount - $playCount;
+            $candidate->weight = $weight;
+            return $candidate;
+        });
+
+        // Sort by weighted random (using weight as probability multiplier)
+        $weightedCandidates = $weightedCandidates->shuffle()->sortByDesc(function ($candidate) {
+            // Generate random number weighted by play count
+            // Less played items get better random scores
+            return rand(1, 100) * $candidate->weight;
+        });
+
+        return $weightedCandidates;
+    }
+
     /**
      * Is entity in Candidate
      */
@@ -32,6 +111,8 @@ trait CandidateManagementTrait
      */
     public function addToCandidates($model, $sets, $entityType)
     {
+        $userSettings = $this->getUserSettings();
+
         $query = $model::whereIn('set', $sets);
 
         // Check if the model's table has the 'unveiled' column
@@ -39,12 +120,16 @@ trait CandidateManagementTrait
             $query->where('unveiled', 0);
         }
 
+        // Filter out epic masterminds if use_epics is disabled
+        if ($entityType === 'masterminds' && $userSettings && !$userSettings->use_epics) {
+            $query->where('name', 'NOT LIKE', '%Epic%');
+        }
 
-        foreach ($query->get() as $scheme) {
+        foreach ($query->get() as $entity) {
             Candidate::create([
                 'setup_id' => $this->setup['id'],
                 'entity_type' => $entityType,
-                'entity_id' => $scheme->id
+                'entity_id' => $entity->id
             ]);
         }
     }
@@ -127,18 +212,40 @@ trait CandidateManagementTrait
             });
         }
 
-        $query->inRandomOrder();
+        $userSettings = $this->getUserSettings();
 
-        if ($take == 1) {
-            return $query->first();
+        // Apply weighted randomization if user has played count weighting enabled
+        if ($userSettings && $userSettings->use_played_count) {
+            $candidates = $query->get();
+
+            if ($candidates->count() > 0) {
+                $candidates = $this->applyWeightedRandomOrder($candidates, $entityType);
+            }
+
+            if ($take == 1) {
+                return $candidates->first();
+            }
+
+            if (is_null($take)) {
+                return $candidates;
+            }
+
+            return $candidates->take($take);
+        } else {
+            // Use standard random ordering
+            $query->inRandomOrder();
+
+            if ($take == 1) {
+                return $query->first();
+            }
+
+            if (is_null($take)) {
+                return $query->get();
+            }
+
+            return $query->take($take)
+                ->get();
         }
-
-        if (is_null($take)) {
-            return $query->get();
-        }
-
-        return $query->take($take)
-            ->get();
     }
 
     /**
@@ -150,14 +257,28 @@ trait CandidateManagementTrait
             ->where('entity_type', $entityType);
 
         if (!is_numeric($entityId ?? null)) {
-            $query->inRandomOrder();
+            $userSettings = $this->getUserSettings();
+
+            // Apply weighted randomization if user has played count weighting enabled
+            if ($userSettings && $userSettings->use_played_count) {
+                $candidates = $query->get();
+
+                if ($candidates->count() > 0) {
+                    $candidates = $this->applyWeightedRandomOrder($candidates, $entityType);
+                }
+
+                $result = $take == 1 ? $candidates->first() : $candidates->take($take);
+            } else {
+                // Use standard random ordering
+                $query->inRandomOrder();
+                $query->take($take);
+                $result = $take == 1 ? $query->first() : $query->get();
+            }
         } else {
             $query->where('entity_id', $entityId);
+            $query->take($take);
+            $result = $take == 1 ? $query->first() : $query->get();
         }
-
-        $query->take($take);
-
-        $result = $take == 1 ? $query->first() : $query->get();
 
         return $result ? $result : null;
     }

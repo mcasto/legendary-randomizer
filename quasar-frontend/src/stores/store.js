@@ -11,6 +11,7 @@ export const useStore = defineStore(
     const state = {
       entities: ref(null),
       game: ref(null),
+      expired: ref(null),
       keywords: ref(null),
       sets: ref(null),
       settings: ref(null),

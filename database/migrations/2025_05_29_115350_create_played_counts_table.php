@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('played_counts', function (Blueprint $table) {
             $table->id();
             $table->string('data_id');
-            $table->string('section');
+            $table->string('entity_type');
             $table->integer('entity_id');
             $table->timestamps();
         });

@@ -44,6 +44,7 @@
     ></q-btn>
   </q-toolbar>
   <component :is="ViewComponent"></component>
+  <div class="q-pa-lg"></div>
 </template>
 
 <script setup>

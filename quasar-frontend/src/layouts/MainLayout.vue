@@ -5,56 +5,22 @@
         <div>
           <q-btn icon="menu" flat>
             <q-menu auto-close>
-              <q-list separator>
-                <q-item clickable :to="{ name: 'index' }" exact>
-                  <q-item-section avatar>
-                    <q-icon name="home" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>
-                      Home
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable :to="{ name: 'game-setup' }">
-                  <q-item-section avatar>
-                    <q-img src="/game-settings.png" style="width: 24px;" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>
-                      Specify Game Setup
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable :to="{ name: 'keyword-index' }">
-                  <q-item-section avatar>
-                    <q-icon name="key" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>
-                      Keyword Index
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable :to="{ name: 'user-settings' }">
-                  <q-item-section avatar>
-                    <q-icon name="settings" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>
-                      User Settings
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
+              <dropdown-menu />
             </q-menu>
           </q-btn>
 
           Legendary Randomizer
         </div>
+
+        <q-btn
+          icon="mdi-close-circle-outline"
+          flat
+          round
+          size="sm"
+          v-if="$route.name == 'index' && store.game"
+          @click="clearGame"
+        ></q-btn>
+
         <q-btn
           icon="logout"
           flat
@@ -68,6 +34,15 @@
     <q-page-container>
       <q-page>
         <router-view />
+        <q-btn
+          icon="check"
+          class="absolute-bottom-right q-ma-md"
+          color="primary"
+          size="sm"
+          label="Mark Played"
+          v-if="store.expired"
+          @click="markPlayed"
+        ></q-btn>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -75,11 +50,73 @@
 
 <script setup>
 import { useStore } from "src/stores/store";
-import { computed } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import DropdownMenu from "src/components/DropdownMenu.vue";
+import { Notify } from "quasar";
+import { differenceInMinutes } from "date-fns";
+import callApi from "src/assets/call-api";
 
 const store = useStore();
 
 const canLogout = computed(() => {
   return store.user;
+});
+
+watch(
+  () => store.game,
+  (newGame) => {
+    if (!store.game) {
+      store.expired = 0;
+      return;
+    }
+    store.expired =
+      differenceInMinutes(new Date(), new Date(store.game.created)) > 15;
+  }
+);
+
+const markPlayed = async () => {
+  await callApi({
+    path: `/mark-played`,
+    method: "put",
+    payload: {
+      gameId: store.game.setup,
+    },
+    useAuth: true,
+  });
+};
+
+const clearGame = () => {
+  if (!store.expired) {
+    Notify.create({
+      type: "warning",
+      message: "Are you sure you want to clear this game?",
+      actions: [
+        {
+          label: "No",
+        },
+        {
+          label: "Yes",
+          handler: () => {},
+        },
+      ],
+    });
+  } else {
+    store.game = null;
+  }
+};
+
+onMounted(() => {
+  const expiredInterval = setInterval(() => {
+    const elapsed = store.game?.created
+      ? differenceInMinutes(new Date(), new Date(store.game.created))
+      : 0;
+
+    store.expired = elapsed > 15;
+  }, 60000);
+
+  // Clear the interval when the component is unmounted
+  onBeforeUnmount(() => {
+    clearInterval(expiredInterval);
+  });
 });
 </script>

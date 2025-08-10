@@ -3,20 +3,29 @@
 // ...Reveal The Heroes' Evil Clones
 // messiahcomplex
 
-// 
+//
 
 namespace App\Handlers\Schemes;
 
 use App\Handlers\BaseHandler;
+use App\Handlers\Traits\VeiledUnveiledSchemeTrait;
 
 class RevealTheHeroesEvilClones_MessiahComplex extends BaseHandler
 {
+    use VeiledUnveiledSchemeTrait;
+
     /**
      * Handle Schemes operations.
      */
-    protected function handle():void
+    protected function handle(): void
     {
-        $this->setup->twists=-1;
+        // Handle scheme setup (no specific twists for unveiled schemes)
+        $this->handleSchemeSetup(0);
+
+        $this->setup->twists = -1;
+
+        // Handle veiled/unveiled scheme pairing
+        $this->handleVeiledUnveiledPairing();
     }
 }
 

@@ -10,6 +10,7 @@ use App\Models\Villain;
 use App\Models\Henchmen;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class EntitiesController extends ResController
 {
@@ -60,8 +61,14 @@ class EntitiesController extends ResController
             $masterminds = Mastermind::whereIn('set', $userSets)
                 ->get(['id', 'name', 'set']);
 
-            // Get Schemes
+            // Get Schemes (one record per unique name)
             $schemes = Scheme::whereIn('set', $userSets)
+                ->whereIn('id', function ($query) use ($userSets) {
+                    $query->select(DB::raw('MIN(id)'))
+                        ->from('schemes')
+                        ->whereIn('set', $userSets)
+                        ->groupBy('name');
+                })
                 ->orderBy('name')
                 ->get(['id', 'name', 'set']);
 

@@ -8,15 +8,22 @@
 namespace App\Handlers\Schemes;
 
 use App\Handlers\BaseHandler;
+use App\Handlers\Traits\VeiledUnveiledSchemeTrait;
 
 class HireSingularityInvestigationsTo_MessiahComplex extends BaseHandler
 {
+    use VeiledUnveiledSchemeTrait;
+
     /**
      * Handle Schemes operations.
      */
-    protected function handle():void
+    protected function handle(): void
     {
-        $this->setup->twists=9;
+        // Handle scheme setup (twists count, scheme increment)
+        $this->handleSchemeSetup(9);
+
+        // Handle veiled/unveiled scheme pairing
+        $this->handleVeiledUnveiledPairing();
     }
 }
 

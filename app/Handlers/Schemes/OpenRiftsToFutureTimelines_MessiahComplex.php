@@ -8,14 +8,20 @@
 namespace App\Handlers\Schemes;
 
 use App\Handlers\BaseHandler;
+use App\Handlers\Traits\VeiledUnveiledSchemeTrait;
 
 class OpenRiftsToFutureTimelines_MessiahComplex extends BaseHandler
 {
+    use VeiledUnveiledSchemeTrait;
+
     /**
      * Handle Schemes operations.
      */
     protected function handle(): void
     {
+        // Handle scheme setup (no specific twists for unveiled schemes)
+        $this->handleSchemeSetup(0);
+
         $this->setup->twists = -1;
         $this->setup->villains++;
 
@@ -23,10 +29,13 @@ class OpenRiftsToFutureTimelines_MessiahComplex extends BaseHandler
         $villain = $this->es->getCandidate(entityType: 'villains');
 
         // add to deck as special
-        $this->es->addToDeck(entityType: 'villains', entityId: $villain['id'], special: true);
+        $this->es->addToDeck(candidate: $villain, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $villain['id']);
+        $this->addExpectation(section: 'villains', candidate: $villain);
+
+        // Handle veiled/unveiled scheme pairing
+        $this->handleVeiledUnveiledPairing();
     }
 }
 

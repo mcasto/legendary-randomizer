@@ -17,8 +17,6 @@ class AvengersVsXMen_CivilWar extends BaseHandler
         $this->setup->twists = 9;
         $this->setup->heroes = 6;
 
-
-
         // get teams with 3+ heroes
         $teams = Team::getTeamsWithAvailableHeroes(setup_id: $this->setup->id, numHeroes: 3)->take(2);
 

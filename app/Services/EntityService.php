@@ -14,6 +14,8 @@ class EntityService
     use CandidateManagementTrait, DeckManagementTrait, HandlerTrait;
 
     public $setup, $mastermind, $scheme;
+    public $nestedSchemeCall = false;
+    public $veiledSchemeTwists = null;
 
     public function __construct(
         ?int $setup_id = null,

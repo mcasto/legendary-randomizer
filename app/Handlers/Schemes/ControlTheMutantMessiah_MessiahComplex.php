@@ -8,18 +8,23 @@
 namespace App\Handlers\Schemes;
 
 use App\Handlers\BaseHandler;
+use App\Handlers\Traits\VeiledUnveiledSchemeTrait;
 use App\Services\EntityService;
 
 class ControlTheMutantMessiah_MessiahComplex extends BaseHandler
 {
+    use VeiledUnveiledSchemeTrait;
+
     /**
      * Handle Schemes operations.
      */
     protected function handle(): void
     {
+        // Handle scheme setup (no specific twists for unveiled schemes)
+        $this->handleSchemeSetup(0);
+
         $this->setup->heroes++;
         $this->setup->villains++;
-        $this->setup->schemes++;
 
         $candidate = $this->es->getCandidate(entityType: 'heroes');
 
@@ -32,6 +37,9 @@ class ControlTheMutantMessiah_MessiahComplex extends BaseHandler
         // add expectations
         $this->addExpectation(candidate: $candidate);
         $this->addExpectation(section: 'villains', candidate: $candidate);
+
+        // Handle veiled/unveiled scheme pairing
+        $this->handleVeiledUnveiledPairing();
     }
 }
 
