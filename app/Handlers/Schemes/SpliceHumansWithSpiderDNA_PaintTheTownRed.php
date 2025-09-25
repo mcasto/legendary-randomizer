@@ -30,10 +30,10 @@ class SpliceHumansWithSpiderDNA_PaintTheTownRed extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $six->id);
+        $this->es->addToDeck(candidate: $candidate);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $six->id);
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

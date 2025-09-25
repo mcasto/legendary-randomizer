@@ -28,10 +28,10 @@ class TheTimeHeist_MarvelStudiosTheInfinitySaga extends BaseHandler
             $this->es->removeCandidate($hero['id']);
 
             // add to deck
-            $this->es->addToDeck(entityType: 'heroes', entityId: $hero['id'], special: true);
+            $this->es->addToDeck(candidate: $hero, special: true);
 
             // add expectation
-            $this->addExpectation(entityType: 'heroes', entityId: $hero['id']);
+            $this->addExpectation(candidate: $hero);
         }
     }
 }

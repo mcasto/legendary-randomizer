@@ -27,16 +27,16 @@ class TrapHeroesInTheMicroverse_AntMan extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to villains
-        $this->es->addToDeck(entityType: 'heroes', entityId: $candidate['entity_id'], section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $candidate['entity_id'], section: 'villains');
+        $this->addExpectation(candidate: $candidate, section: 'villains');
 
         // add to heroes
-        $this->es->addToDeck(entityType: 'heroes', entityId: $candidate['entity_id'],  special: true);
+        $this->es->addToDeck(candidate: $candidate,  special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $candidate['entity_id']);
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

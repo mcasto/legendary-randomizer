@@ -40,7 +40,7 @@
           color="primary"
           size="sm"
           label="Mark Played"
-          v-if="store.expired"
+          v-if="store.expired && store.game"
           @click="markPlayed"
         ></q-btn>
       </q-page>
@@ -66,9 +66,10 @@ watch(
   () => store.game,
   (newGame) => {
     if (!store.game) {
-      store.expired = 0;
+      store.expired = true;
       return;
     }
+
     store.expired =
       differenceInMinutes(new Date(), new Date(store.game.created)) > 15;
   }
@@ -96,7 +97,9 @@ const clearGame = () => {
         },
         {
           label: "Yes",
-          handler: () => {},
+          handler: () => {
+            store.game = null;
+          },
         },
       ],
     });

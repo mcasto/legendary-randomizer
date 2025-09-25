@@ -24,11 +24,13 @@ class PutHumanityOnTrial_Annihilation extends BaseHandler
             'name' => '11 Bystanders as "Galactic Jurors"'
         ]);
 
+        $candidate = (object) ['entity_type' => 'special_entities', 'entity_id' => $special->id];
+
         // add to deck
-        $this->es->addToDeck(entityType: 'special_entities', entityId: $special->id, section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'special_entities', entityId: $special->id, section: 'villains');
+        $this->addExpectation(candidate: $candidate, section: 'villains');
     }
 }
 

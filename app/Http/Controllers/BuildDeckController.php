@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Deck;
+use App\Models\User;
 use App\Services\EntityService;
 use App\Services\OutputDeckService;
 use Illuminate\Http\Request;
@@ -16,7 +17,9 @@ class BuildDeckController extends Controller
         $mastermindID = $request->input('mastermind') ?? null;
 
         // get user
-        $user = $request->user();
+        // $user = $request->user();
+        $user = User::find(3);
+
         if (!$user) {
             return response()->json([
                 'status' => 'error',

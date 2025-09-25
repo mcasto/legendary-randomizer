@@ -28,16 +28,16 @@ class XCutionersSong_DarkCity extends BaseHandler
         $this->es->removeCandidate($hero['id']);
 
         // add to villains
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hero['entity_id'], section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $hero, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $hero['entity_id'], section: 'villains');
+        $this->addExpectation(candidate: $hero, section: 'villains');
 
         // add to heroes
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hero['entity_id'], section: 'heroes', special: true);
+        $this->es->addToDeck(candidate: $hero, section: 'heroes', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $hero['entity_id'], section: 'heroes');
+        $this->addExpectation(candidate: $hero, section: 'heroes');
     }
 }
 

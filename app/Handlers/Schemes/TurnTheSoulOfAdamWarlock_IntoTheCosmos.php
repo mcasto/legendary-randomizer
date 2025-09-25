@@ -32,16 +32,16 @@ class TurnTheSoulOfAdamWarlock_IntoTheCosmos extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to villains
-        $this->es->addToDeck(entityType: 'heroes', entityId: $adam->id, section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $adam->id, section: 'villains');
+        $this->addExpectation(candidate: $candidate, section: 'villains');
 
         // add to heroes
-        $this->es->addToDeck(entityType: 'heroes', entityId: $adam->id, section: 'heroes', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'heroes', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $adam->id, section: 'heroes');
+        $this->addExpectation(candidate: $candidate, section: 'heroes');
     }
 }
 

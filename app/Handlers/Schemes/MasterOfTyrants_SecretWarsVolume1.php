@@ -26,10 +26,10 @@ class MasterOfTyrants_SecretWarsVolume1 extends BaseHandler
         // add them to deck & remove candidates
         foreach ($candidates as $candidate) {
             // add to deck
-            $this->es->addToDeck(entityType: 'masterminds', entityId: $candidate['id'], section: 'villains', special: true);
+            $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
             // add expectation
-            $this->addExpectation(entityType: 'masterminds', entityId: $candidate['id'], section: 'villains');
+            $this->addExpectation(candidate: $candidate, section: 'villains');
 
             // remove from candidates
             $this->es->removeCandidate($candidate['id']);

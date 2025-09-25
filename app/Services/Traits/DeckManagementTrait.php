@@ -23,6 +23,9 @@ trait DeckManagementTrait
 
     /**
      * Add to Deck
+     * @param object $candidate a candidate pulled from entityService->getCandidate
+     * @param string $section which deck does candidate go into
+     * @param bool $special is candidate going to be marked as special?
      */
     public function addToDeck($candidate, ?string $section = null, bool $special = false)
     {

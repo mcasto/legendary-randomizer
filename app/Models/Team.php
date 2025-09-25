@@ -40,22 +40,15 @@ class Team extends Model
             }])
             ->inRandomOrder() // Randomize team order
             ->get()
-            ->map(function ($team) use ($numHeroes) {
-                $availableHeroes = $team->heroes
-                    ->filter(function ($hero) {
-                        return $hero->candidates->isNotEmpty();
-                    })
-                    ->shuffle(); // Shuffle the available heroes
-
-                if ($availableHeroes->count() >= $numHeroes) {
-                    return [
-                        'team' => $team->only(['id', 'value', 'label', 'icon']),
-                        'available_heroes' => $availableHeroes->map->only(['id', 'name', 'set']),
-                        'available_heroes_count' => $availableHeroes->count()
-                    ];
-                }
-                return null;
+            ->filter(function ($team) use ($numHeroes) {
+                return count($team->heroes) >= $numHeroes;  // find teams with enough heroes to fill roster
             })
-            ->filter();
+            ->map(function ($team) {
+                return [
+                    'team' => $team->only(['id', 'value', 'label', 'icon']),
+                    'available_heroes' => $team->heroes->map->only(['id', 'name', 'set']),
+                    'available_heroes_count' => count($team->heroes)
+                ];
+            });
     }
 }

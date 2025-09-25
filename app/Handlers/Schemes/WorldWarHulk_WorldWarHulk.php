@@ -27,10 +27,10 @@ class WorldWarHulk_WorldWarHulk extends BaseHandler
             $this->es->removeCandidate($candidate['id']);
 
             // add to deck
-            $this->es->addToDeck(entityType: 'masterminds', entityId: $candidate['entity_id'], special: true);
+            $this->es->addToDeck(candidate: $candidate, special: true);
 
             // add expectation
-            $this->addExpectation(entityType: 'masterminds', entityId: $candidate['entity_id']);
+            $this->addExpectation(candidate: $candidate);
         }
     }
 }

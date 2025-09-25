@@ -36,16 +36,16 @@ class TrashEarthWithHugestPartyEver_MarvelStudiosWhatIf extends BaseHandler
         $candidate = $this->es->getCandidate(entityType: 'villains', entityId: $animals->id);
 
         // add thor to deck
-        $this->es->addToDeck(entityType: 'heroes', entityId: $thor->id);
+        $this->es->addToDeck(candidate: $thor);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $thor->id);
+        $this->addExpectation(candidate: $thor);
 
         // add animals to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $animals->id);
+        $this->es->addToDeck(candidate: $animals);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $animals->id);
+        $this->addExpectation(candidate: $animals);
     }
 }
 

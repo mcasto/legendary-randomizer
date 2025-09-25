@@ -6,3 +6,6 @@
 ☐ fix all the entityType named params in handlers (really, fix all handlers)
 ☐ determine why there are schemes with same name in multiple sets
 ☐ basically, write a full master-strike-parser and get it working
+☐ Fix House of M scheme
+
+☐ replace sendgrid with mailersend

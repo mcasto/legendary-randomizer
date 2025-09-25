@@ -35,19 +35,21 @@ class MarvelZombies_MarvelStudiosWhatIf extends BaseHandler
             ->map(fn($villain) => $villain->id)
             ->toArray();
 
+        // get villain
+        $villain_id = array_shift($ids);
+
+        $candidate = $this->es->getCandidate(entityType: 'villains', entityId: $villain_id);
+
         // remove all villains from candidates with rise of the living dead
         Candidate::where('entity_type', 'villains')
             ->whereIn('entity_id', $ids)
             ->delete();
 
-        // get villain
-        $villain = array_shift($ids);
-
         // add to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $villain);
+        $this->es->addToDeck(candidate: $candidate);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $villain);
+        $this->addExpectation(candidate: $candidate);
 
         // get random hero
         $candidate = $this->es->getCandidate(entityType: 'heroes');
@@ -56,16 +58,16 @@ class MarvelZombies_MarvelStudiosWhatIf extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to villains
-        $this->es->addToDeck(entityType: 'heroes', entityId: $candidate['id'], section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $candidate['id'], section: 'villains');
+        $this->addExpectation(candidate: $candidate, section: 'villains');
 
         // add to heroes
-        $this->es->addToDeck(entityType: 'heroes', entityId: $candidate['id'], special: true);
+        $this->es->addToDeck(candidate: $candidate, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $candidate['id']);
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

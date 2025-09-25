@@ -25,11 +25,13 @@ class MassProduceWarMachineArmor_Villains extends BaseHandler
             'name' => '10 S.H.I.E.L.D. Assault Squads'
         ]);
 
+        $candidate = (object) ['entity_type' => 'special_entities', 'entity_id' => $special->id];
+
         // add to deck
-        $this->es->addToDeck(entityType: 'special_entities', entityId: $special->id, section: 'henchmen');
+        $this->es->addToDeck(candidate: $candidate, section: 'henchmen');
 
         // add expectation
-        $this->addExpectation(entityType: 'special_entities', entityId: $special->id, section: 'henchmen');
+        $this->addExpectation(candidate: $candidate, section: 'henchmen');
     }
 }
 

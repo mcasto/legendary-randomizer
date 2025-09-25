@@ -31,9 +31,6 @@ class AvengersVsXMen_CivilWar extends BaseHandler
 
                 // add to expectations
                 $this->addExpectation(candidate: $candidate);
-
-                // remove from candidates
-                $hero->delete();
             }
         }
     }

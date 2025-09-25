@@ -36,21 +36,23 @@ class SecretInvasionOfTheSkrullShapeshifters_CoreSet extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $skrulls->id);
+        $this->es->addToDeck(candidate: $candidate);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $skrulls->id);
+        $this->addExpectation(candidate: $candidate);
 
         // create special entity
         $special = SpecialEntity::create([
             'name' => '12 Random Heroes'
         ]);
 
+        $specialCandidate = (object)['entity_type' => 'special_entities', 'entity_id' => $special->id];
+
         // add to deck
-        $this->es->addToDeck(entityType: 'special_entities', entityId: $special->id, section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $specialCandidate, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'special_entities', entityId: $special->id, section: 'villains');
+        $this->addExpectation(candidate: $specialCandidate, section: 'villains');
     }
 }
 

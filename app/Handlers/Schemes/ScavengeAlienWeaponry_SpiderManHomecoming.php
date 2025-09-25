@@ -26,10 +26,10 @@ class ScavengeAlienWeaponry_SpiderManHomecoming extends BaseHandler
         $this->es->removeCandidate($henchmen['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'henchmen', entityId: $henchmen['id'], special: true);
+        $this->es->addToDeck(candidate: $henchmen, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'henchmen', entityId: $henchmen['id']);
+        $this->addExpectation(candidate: $henchmen);
     }
 }
 

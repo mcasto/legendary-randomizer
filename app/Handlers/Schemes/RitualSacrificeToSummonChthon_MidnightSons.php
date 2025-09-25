@@ -31,10 +31,10 @@ class RitualSacrificeToSummonChthon_MidnightSons extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $lilin->id, special: true);
+        $this->es->addToDeck($candidate, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $lilin->id);
+        $this->addExpectation($candidate);
     }
 }
 

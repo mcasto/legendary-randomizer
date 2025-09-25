@@ -42,8 +42,8 @@ Route::get('/keywords', [KeywordController::class, 'index'])
     ->middleware('auth:sanctum')
     ->name('keywords.index');
 
-Route::get('/user-settings', function () {
-    $user = auth()->user();
+Route::get('/user-settings', function (Request $request) {
+    $user = $request->user();
     return response()->json($user->settings());
 })
     ->middleware('auth:sanctum')

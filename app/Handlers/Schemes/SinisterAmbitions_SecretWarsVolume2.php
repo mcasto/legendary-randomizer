@@ -25,11 +25,13 @@ class SinisterAmbitions_SecretWarsVolume2 extends BaseHandler
             'name' => '10 random Ambitions'
         ]);
 
+        $candidate = (object)['entity_type' => 'special_entities', 'entity_id' => $ambitions->id];
+
         // add to deck
-        $this->es->addToDeck(entityType: 'special_entities', entityId: $ambitions->id, section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
         // add expectations
-        $this->addExpectation(entityType: 'special_entities', entityId: $ambitions->id, section: 'villains');
+        $this->addExpectation(candidate: $candidate, section: 'villains');
     }
 }
 

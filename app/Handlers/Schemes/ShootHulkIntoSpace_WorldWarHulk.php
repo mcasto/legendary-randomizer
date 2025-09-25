@@ -32,10 +32,10 @@ class ShootHulkIntoSpace_WorldWarHulk extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hulk->id, special: true);
+        $this->es->addToDeck(candidate: $candidate, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $hulk->id);
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

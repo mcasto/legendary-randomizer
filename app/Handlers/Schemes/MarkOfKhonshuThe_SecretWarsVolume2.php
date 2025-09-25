@@ -28,25 +28,25 @@ class MarkOfKhonshuThe_SecretWarsVolume2 extends BaseHandler
         $hero = $this->es->getCandidate(entityType: 'heroes');
 
         // add guardians to deck
-        $this->es->addToDeck(entityType: 'henchmen', entityId: $guardians->id);
+        $this->es->addToDeck(candidate: $candidate);
 
         // add expectation
-        $this->addExpectation(entityType: 'henchmen', entityId: $guardians->id);
+        $this->addExpectation(candidate: $candidate);
 
         // remove guardians from candidates
         $this->es->removeCandidate($candidate['id']);
 
         // add hero to villains
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hero['entity_id'], section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $hero, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $hero['entity_id'], section: 'villains');
+        $this->addExpectation(candidate: $hero, section: 'villains');
 
         // add to heroes
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hero['entity_id'], special: true);
+        $this->es->addToDeck(candidate: $candidate, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $hero['entity_id']);
+        $this->addExpectation(candidate: $candidate);
 
         // remove candidate
         $this->es->removeCandidate($hero['id']);

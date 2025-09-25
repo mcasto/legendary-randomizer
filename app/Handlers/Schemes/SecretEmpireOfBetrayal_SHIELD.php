@@ -25,10 +25,10 @@ class SecretEmpireOfBetrayal_SHIELD extends BaseHandler
         $this->es->removeCandidate($hero['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hero['entity_id']);
+        $this->es->addToDeck(candidate: $hero);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $hero['entity_id']);
+        $this->addExpectation(candidate: $hero);
     }
 }
 

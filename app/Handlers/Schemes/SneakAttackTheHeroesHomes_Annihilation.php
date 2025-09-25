@@ -27,11 +27,13 @@ class SneakAttackTheHeroesHomes_Annihilation extends BaseHandler
                 'name' => "Player #$playerNum selected Hero"
             ]);
 
+            $candidate = (object)['entity_type' => 'special_entities', 'entity_id' => $special->id];
+
             // add to deck
-            $this->es->addToDeck(entityType: 'special_entities', entityId: $special->id, section: 'heroes', special: true);
+            $this->es->addToDeck(candidate: $candidate, section: 'heroes', special: true);
 
             // add expectation
-            $this->addExpectation(entityType: 'special_entities', entityId: $special->id, section: 'heroes');
+            $this->addExpectation(candidate: $candidate, section: 'heroes');
         }
     }
 }

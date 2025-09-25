@@ -27,10 +27,10 @@ class MutantHuntingSuperSentinels_XMen extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'henchmen', entityId: $candidate['id'], special: true);
+        $this->es->addToDeck(candidate: $candidate, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'henchmen', entityId: $candidate['id']);
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

@@ -34,15 +34,15 @@ class MutatingGammaRays_WorldWarHulk extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to villains
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hulk->id, section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
         // add to heores
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hulk->id, special: true);
+        $this->es->addToDeck(candidate: $candidate, special: true);
 
         // add expectations
-        $this->addExpectation(entityType: 'heroes', entityId: $hulk->id, section: 'villains');
+        $this->addExpectation(candidate: $candidate, section: 'villains');
 
-        $this->addExpectation(entityType: 'heroes', entityId: $hulk->id);
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

@@ -37,10 +37,10 @@ class StarLordsAwesomeMixTape_MarvelStudiosGuardiansOfTheGalaxy extends BaseHand
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'heroes', entityId: $hero->id);
+        $this->es->addToDeck(candidate: $candidate);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $hero->id);
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

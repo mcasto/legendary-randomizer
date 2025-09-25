@@ -31,10 +31,10 @@ class TransformCitizensIntoDemons_DarkCity extends BaseHandler
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'heroes', entityId: $jean->id, section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'heroes', entityId: $jean->id, section: 'villains');
+        $this->addExpectation(candidate: $candidate, section: 'villains');
     }
 }
 

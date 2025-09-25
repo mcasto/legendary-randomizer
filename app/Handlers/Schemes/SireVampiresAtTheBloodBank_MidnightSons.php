@@ -26,10 +26,10 @@ class SireVampiresAtTheBloodBank_MidnightSons extends BaseHandler
         $this->es->removeCandidate($vampires['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'henchmen', entityId: $vampires['id'], special: true);
+        $this->es->addToDeck(candidate: $vampires, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'henchmen', entityId: $vampires['id']);
+        $this->addExpectation(candidate: $vampires);
     }
 }
 

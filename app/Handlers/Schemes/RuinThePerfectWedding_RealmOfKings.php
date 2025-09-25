@@ -23,20 +23,21 @@ class RuinThePerfectWedding_RealmOfKings extends BaseHandler
         $heroes = $this->es->getCandidate(entityType: 'heroes', take: 2);
 
         foreach ($heroes as $hero) {
+            $candidate = $this->es->getCandidate(entityType: 'heroes', entityId: $hero['id']);
             // remove candidate
             $this->es->removeCandidate($hero['id']);
 
             // add to heroes
-            $this->es->addToDeck(entityType: 'heroes', entityId: $hero['id'], special: true);
+            $this->es->addToDeck(candidate: $candidate, special: true);
 
             // add expectation
-            $this->addExpectation(entityType: 'heroes', entityId: $hero['id']);
+            $this->addExpectation(candidate: $candidate);
 
             // add to villains
-            $this->es->addToDeck(entityType: 'heroes', section: 'villains', entityId: $hero['id'], special: true);
+            $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
             // add expectation
-            $this->addExpectation(entityType: 'heroes', section: 'villains', entityId: $hero['id']);
+            $this->addExpectation(candidate: $candidate, section: 'villains',);
         }
     }
 }

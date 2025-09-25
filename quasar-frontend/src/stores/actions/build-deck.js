@@ -55,7 +55,7 @@ const runBuildDeck = (numPlayers) => {
 export default (numPlayers) => {
   const store = useStore();
 
-  if (store.expired) {
+  if (store.expired || !store.game) {
     runBuildDeck(numPlayers);
     return;
   }

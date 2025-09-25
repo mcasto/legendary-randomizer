@@ -25,14 +25,23 @@ class SymbioticAbsorption_Venom extends BaseHandler
         // get special mastermind candidate (need full candidate to get always leads)
         $response = $this->mastermindWithAlwaysLeads();
 
-        // remove candidate
-        $this->es->removeCandidate($response['candidate']->id);
+        // get mastermind candidate
+        $mm = $response['candidate'];
+
+        // get always_leads candidate
+        $al = $this->es->getCandidate(entityType: $response['entity_type'], entityId: $response['always_leads']['id']);
+
+        // remove mm candidate
+        $this->es->removeCandidate($mm->id);
+
+        // remove al candidate
+        $this->es->removeCandidate($al->id);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'masterminds', entityId: $response['mastermind']->id, special: true);
+        $this->es->addToDeck(candidate: $mm, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'masterminds', entityId: $response['mastermind']->id);
+        $this->addExpectation(candidate: $mm);
 
         // increment villains or henchmen depending on always leads
         if ($response['entity_type'] == 'villains') {
@@ -42,16 +51,10 @@ class SymbioticAbsorption_Venom extends BaseHandler
         }
 
         // add that to villain/henchmen deck
-        $this->es->addToDeck(entityType: $response['entity_type'], entityId: $response['always_leads']->id);
-
-        // get candidate
-        $candidate = $this->es->getCandidate(entityType: $response['entity_type'], entityId: $response['always_leads']->id);
-
-        // remove candidate
-        $this->es->removeCandidate($candidate['id']);
+        $this->es->addToDeck(candidate: $al);
 
         // add expectation
-        $this->addExpectation(entityType: $response['entity_type'], entityId: $response['always_leads']->id);
+        $this->addExpectation(candidate: $al);
     }
 }
 

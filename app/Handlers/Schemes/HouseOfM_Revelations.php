@@ -42,46 +42,46 @@ class HouseOfM_Revelations extends BaseHandler
         // pull heroes from teams
         $heroes = array_merge(
             $four_heroes['available_heroes']
-                ->take(4),
+                ->take(4)
+                ->toArray(),
             $two_heroes['available_heroes']
                 ->take(2)
+                ->toArray()
         );
 
-        dd($heroes);
+        foreach ($heroes as $hero) {
+            $candidate = $this->es->getCandidate(entityType: 'heroes', entityId: $hero['id']);
 
-        // foreach ($heroes as $hero) {
-        //     $candidate = $this->es->getCandidate(entityType: 'heroes', entityId: $hero['id']);
+            // add to deck
+            $this->es->addToDeck(candidate: $candidate);
 
-        //     // add to deck
-        //     $this->es->addToDeck(entityType: 'heroes', entityId: $hero['id']);
+            // add expectation
+            $this->addExpectation(candidate: $candidate);
 
-        //     // add expectation
-        //     $this->addExpectation(entityType: 'heroes', entityId: $hero['id']);
+            // remove candidate
+            $this->es->removeCandidate($candidate['id']);
+        }
 
-        //     // remove candidate
-        //     $this->es->removeCandidate($candidate['id']);
-        // }
+        // get scarlet witch
+        $witch = Hero::where('name', 'Scarlet Witch')->first();
 
-        // // get scarlet witch
-        // $witch = Hero::where('name', 'Scarlet Witch')->first();
+        // get candidate
+        $candidate = $this->es->getCandidate(entityType: 'heroes', entityId: $witch->id);
 
-        // // get candidate
-        // $candidate = $this->es->getCandidate(entityType: 'heroes', entityId: $witch->id);
+        // remove candidate
+        $this->es->removeCandidate($candidate['id']);
 
-        // // remove candidate
-        // $this->es->removeCandidate($candidate['id']);
+        // add to villin deck
+        $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
 
-        // // add to villin deck
-        // $this->es->addToDeck(entityType: 'heroes', entityId: $witch->id, section: 'villains', special: true);
+        // add expectation
+        $this->addExpectation(candidate: $candidate, section: 'villains');
 
-        // // add expectation
-        // $this->addExpectation(entityType: 'heroes', entityId: $witch->id, section: 'villains');
+        // add to hero deck
+        $this->es->addToDeck(candidate: $candidate, special: true);
 
-        // // add to hero deck
-        // $this->es->addToDeck(entityType: 'heroes', entityId: $witch->id, special: true);
-
-        // // add expectation
-        // $this->addExpectation(entityType: 'heroes', entityId: $witch->id);
+        // add expectation
+        $this->addExpectation(candidate: $candidate);
     }
 }
 

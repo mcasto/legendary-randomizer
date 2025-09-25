@@ -31,21 +31,23 @@ class SiphonEnergyFromTheQuantumRealm_MarvelStudiosAntManAndTheWasp extends Base
         $this->es->removeCandidate($candidate['id']);
 
         // add to deck
-        $this->es->addToDeck(entityType: 'villains', entityId: $qr->id, special: true);
+        $this->es->addToDeck(candidate: $candidate, special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'villains', entityId: $qr->id);
+        $this->addExpectation(candidate: $candidate);
 
         // create special
         $special = SpecialEntity::create([
             'name' => 'Shuffle Ambush Scheme into Villain Deck'
         ]);
 
+        $specialCandidate = (object)['entity_type' => 'special_entities', 'entity_id' => $special->id];
+
         // add to deck
-        $this->es->addToDeck(entityType: 'special_entities', section: 'villains', entityId: $special->id, special: true);
+        $this->es->addToDeck(candidate: $specialCandidate, section: 'villains', special: true);
 
         // add expectation
-        $this->addExpectation(entityType: 'special_entities', section: 'villains', entityId: $special->id);
+        $this->addExpectation(candidate: $specialCandidate, section: 'villains');
     }
 }
 
