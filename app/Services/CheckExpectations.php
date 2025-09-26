@@ -18,12 +18,6 @@ class CheckExpectations
                 ->filter(fn($item) => $item->section == $key);
 
             if (count($items) != $setup->{$key}) {
-                logger()->error([
-                    'key' => $key,
-                    'setup_count' => $setup->{$key},
-                    'deck_count' => count($items)
-                ]);
-
                 return false;
             }
         }

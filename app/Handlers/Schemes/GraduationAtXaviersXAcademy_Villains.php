@@ -26,7 +26,7 @@ class GraduationAtXaviersXAcademy_Villains extends BaseHandler
             'name' => '8 Bystanders as "Young Mutants"'
         ]);
 
-        $candidate = [
+        $candidate = (object)[
             'entity_type' => 'special_entities',
             'entity_id' => $special->id
         ];

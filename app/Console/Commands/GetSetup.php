@@ -55,7 +55,5 @@ class GetSetup extends Command
                 ];
             }
         }
-
-        logger()->debug($output);
     }
 }

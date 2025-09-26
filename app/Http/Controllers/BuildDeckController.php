@@ -17,8 +17,7 @@ class BuildDeckController extends Controller
         $mastermindID = $request->input('mastermind') ?? null;
 
         // get user
-        // $user = $request->user();
-        $user = User::find(3);
+        $user = $request->user();
 
         if (!$user) {
             return response()->json([
@@ -52,12 +51,14 @@ class BuildDeckController extends Controller
 
         try {
             $result = OutputDeckService::build($es->setup);
+
             return response()->json([
                 'status' => 'success',
                 'game' => [
                     'setup' => $result['setup'],
                     'deck' => $result['deck']
-                ]
+                ],
+                'expected' => $result['expected']
             ]);
         } catch (\RuntimeException $e) {
             logger()->error($e->getMessage());

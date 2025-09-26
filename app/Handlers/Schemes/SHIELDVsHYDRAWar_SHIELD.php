@@ -34,7 +34,7 @@ class SHIELDVsHYDRAWar_SHIELD extends BaseHandler
 
         $villain = $hydras->pop();
 
-        $candidate = ['entity_type' => 'villains', 'entity_id' => $villain->id];
+        $candidate = (object)['entity_type' => 'villains', 'entity_id' => $villain->id];
 
         // add to deck
         $this->es->addToDeck(

@@ -19,10 +19,7 @@ class OpenRiftsToFutureTimelines_MessiahComplex extends BaseHandler
      */
     protected function handle(): void
     {
-        // Handle scheme setup (no specific twists for unveiled schemes)
-        $this->handleSchemeSetup(0);
 
-        $this->setup->twists = -1;
         $this->setup->villains++;
 
         // get additional villain
@@ -33,9 +30,6 @@ class OpenRiftsToFutureTimelines_MessiahComplex extends BaseHandler
 
         // add expectation
         $this->addExpectation(section: 'villains', candidate: $villain);
-
-        // Handle veiled/unveiled scheme pairing
-        $this->handleVeiledUnveiledPairing();
     }
 }
 

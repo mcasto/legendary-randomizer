@@ -25,10 +25,8 @@ class CageVillainsInPowerSuppressingCells_Villains extends BaseHandler
             'name' => 'Cops'
         ]);
 
-        $candidate = [
-            'entity_type' => 'special_entities',
-            'entity_id' => $cops->id
-        ];
+        $candidate = (object) ['entity_type' => 'special_entities', 'entity_id' => $cops->id];
+
 
         // add to deck
         $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);

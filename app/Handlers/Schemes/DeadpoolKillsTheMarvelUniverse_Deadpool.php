@@ -28,13 +28,13 @@ class DeadpoolKillsTheMarvelUniverse_Deadpool extends BaseHandler
         $deadpool = $this->es->pullCandidate(entityType: 'heroes', name: '\bDeadpool\b', isRegex: true, take: 1);
 
         // add to deck
-        $this->es->addToDeck(candidate: $deadpool);
+        $this->es->addToDeck(candidate: (object) $deadpool);
 
         // add expectation
-        $this->addExpectation(candidate: $deadpool);
+        $this->addExpectation(candidate: (object) $deadpool);
 
         // remove from candidates
-        $deadpool->deleete();
+        $this->es->removeCandidate($deadpool['id']);
     }
 }
 

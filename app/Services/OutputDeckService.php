@@ -14,11 +14,9 @@ class OutputDeckService
     public static function build(Setup $setup): bool|array
     {
         $meetsExpectations = CheckExpectations::validate($setup);
-        if (!$meetsExpectations) {
-            throw new \RuntimeException('Setup does not meet expectations');
-        }
 
         $output = [
+            'expected' => $meetsExpectations,
             'setup' => $setup->toArray(),
             'deck' => []
         ];

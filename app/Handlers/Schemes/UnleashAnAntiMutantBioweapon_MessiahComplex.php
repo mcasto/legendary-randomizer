@@ -19,13 +19,8 @@ class UnleashAnAntiMutantBioweapon_MessiahComplex extends BaseHandler
      */
     protected function handle(): void
     {
-        // Handle scheme setup (no specific twists for unveiled schemes)
-        $this->handleSchemeSetup(0);
 
-        $this->setup->twists = -1;
-
-        // Handle veiled/unveiled scheme pairing
-        $this->handleVeiledUnveiledPairing();
+        //
     }
 }
 

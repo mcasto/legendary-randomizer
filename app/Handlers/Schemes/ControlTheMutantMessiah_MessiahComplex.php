@@ -20,8 +20,6 @@ class ControlTheMutantMessiah_MessiahComplex extends BaseHandler
      */
     protected function handle(): void
     {
-        // Handle scheme setup (no specific twists for unveiled schemes)
-        $this->handleSchemeSetup(0);
 
         $this->setup->heroes++;
         $this->setup->villains++;
@@ -37,9 +35,6 @@ class ControlTheMutantMessiah_MessiahComplex extends BaseHandler
         // add expectations
         $this->addExpectation(candidate: $candidate);
         $this->addExpectation(section: 'villains', candidate: $candidate);
-
-        // Handle veiled/unveiled scheme pairing
-        $this->handleVeiledUnveiledPairing();
     }
 }
 

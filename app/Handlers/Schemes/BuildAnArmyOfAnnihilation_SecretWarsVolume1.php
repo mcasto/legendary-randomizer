@@ -22,7 +22,7 @@ class BuildAnArmyOfAnnihilation_SecretWarsVolume1 extends BaseHandler
         $this->setup->henchmen++;
 
         // select a henchmen from candidates
-        $henchmen = $this->es->pullCandidate('henchmen');
+        $henchmen = $this->es->getCandidate('henchmen');
 
         // add to deck
         $this->es->addToDeck(candidate: $henchmen, special: true);
@@ -31,7 +31,7 @@ class BuildAnArmyOfAnnihilation_SecretWarsVolume1 extends BaseHandler
         $this->addExpectation(candidate: $henchmen);
 
         // remove from candidates
-        $henchmen->delete();
+        $this->es->removeCandidate($henchmen['id']);
     }
 }
 

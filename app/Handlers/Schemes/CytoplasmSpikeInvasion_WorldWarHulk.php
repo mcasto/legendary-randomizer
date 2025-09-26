@@ -33,7 +33,7 @@ class CytoplasmSpikeInvasion_WorldWarHulk extends BaseHandler
             'name' => '20 Bystanders + 10 Cytoplasm Spikes'
         ]);
 
-        $candidate = [
+        $candidate = (object) [
             'entity_type' => 'special_entities',
             'entity_id' => $entity->id
         ];

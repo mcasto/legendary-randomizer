@@ -22,10 +22,9 @@ class RuinThePerfectWedding_RealmOfKings extends BaseHandler
         // get wedding heroes
         $heroes = $this->es->getCandidate(entityType: 'heroes', take: 2);
 
-        foreach ($heroes as $hero) {
-            $candidate = $this->es->getCandidate(entityType: 'heroes', entityId: $hero['id']);
+        foreach ($heroes as $candidate) {
             // remove candidate
-            $this->es->removeCandidate($hero['id']);
+            $this->es->removeCandidate($candidate['id']);
 
             // add to heroes
             $this->es->addToDeck(candidate: $candidate, special: true);

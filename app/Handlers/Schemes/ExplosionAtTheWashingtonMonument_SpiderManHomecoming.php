@@ -25,7 +25,7 @@ class ExplosionAtTheWashingtonMonument_SpiderManHomecoming extends BaseHandler
             'name' => '18 Bystanders and 14 Wounds'
         ]);
 
-        $candidate = [
+        $candidate = (object) [
             'entity_type' => 'special_entities',
             'entity_id' => $monument->id
         ];

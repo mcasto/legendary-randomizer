@@ -25,7 +25,7 @@ class ReplaceEarthsLeadersWithKillbots_CoreSet extends BaseHandler
             'name' => '3 additional twists'
         ]);
 
-        $candidate = (object) ['entity_type' => 'special_entity', 'entity_id' => $special->id];
+        $candidate = (object) ['entity_type' => 'special_entities', 'entity_id' => $special->id];
 
         // add to deck
         $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);

@@ -25,8 +25,7 @@ class CorruptTheNextGenerationOfHeroes_SecretWarsVolume1 extends BaseHandler
             'name' => '10 Sidekicks'
         ]);
 
-
-        $candidate = [
+        $candidate = (object) [
             'entity_type' => 'special_entities',
             'entity_id' => $special->id
         ];

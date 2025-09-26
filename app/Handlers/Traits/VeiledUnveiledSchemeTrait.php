@@ -13,71 +13,33 @@ trait VeiledUnveiledSchemeTrait
      */
     protected function handleVeiledUnveiledPairing(): void
     {
-        // Prevent infinite loops by checking if we're already in a nested scheme call
-        if ($this->isNestedSchemeCall()) {
-            return; // Don't pull another scheme if we're already nested
-        }
-
         // Get user's owned sets
         $sets = HasSet::where('data_id', $this->setup->data_id)
             ->get()
             ->toArray();
         $userSets = array_map(fn($rec) => $rec['set_value'], $sets);
 
-        // Get the current scheme to determine if it's veiled or unveiled
-        $currentScheme = $this->getCurrentScheme();
-
-        if (!$currentScheme) {
-            return;
-        }
-
-        // Determine what type of scheme to pull based on current scheme
-        $targetVeiled = $currentScheme->veiled == 1 ? 0 : 1; // Opposite of current
-
         // Find the opposite type scheme from user's sets that isn't already in use
         $pairedScheme = Scheme::whereIn('set', $userSets)
-            ->where('unveiled', $targetVeiled)
-            ->whereNotIn('id', function ($query) {
-                $query->select('entity_id')
-                    ->from('candidates')
-                    ->where('setup_id', $this->setup->id)
-                    ->where('entity_type', 'schemes');
-            })
-            ->whereNotIn('id', function ($query) {
-                $query->select('entity_id')
-                    ->from('decks')
-                    ->where('setup_id', $this->setup->id)
-                    ->where('entity_type', 'schemes');
-            })
+            ->where('unveiled', 1)
             ->inRandomOrder()
             ->first();
 
-        if ($pairedScheme) {
-            // Create a candidate entry for the paired scheme
-            $candidate = Candidate::create([
-                'setup_id' => $this->setup->id,
-                'entity_type' => 'schemes',
-                'entity_id' => $pairedScheme->id
-            ]);
+        // Create a candidate entry for the paired scheme
+        $candidate = Candidate::create([
+            'setup_id' => $this->setup->id,
+            'entity_type' => 'schemes',
+            'entity_id' => $pairedScheme->id
+        ]);
 
-            // Add the paired scheme to the deck
-            $this->es->addToDeck($candidate);
+        // Add the paired scheme to the deck
+        $this->es->addToDeck($candidate);
 
-            // Add expectation for the paired scheme
-            $this->addExpectation($candidate);
+        // Add expectation for the paired scheme
+        $this->addExpectation($candidate);
 
-            // Mark that we're about to run a nested scheme call
-            $this->setNestedSchemeCall(true);
-
-            // Run the handler for the paired scheme (if it exists)
-            $this->runSchemeHandler($pairedScheme);
-
-            // Clear the nested flag
-            $this->setNestedSchemeCall(false);
-
-            // Remove the candidate since it's now been processed
-            $candidate->delete();
-        }
+        // Run the handler for the paired scheme (if it exists)
+        $this->runSchemeHandler($pairedScheme);
     }
 
     /**

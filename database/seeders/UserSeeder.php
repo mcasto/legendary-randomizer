@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'password' => 'lovemeg0524',
             'data_id' => uniqid()
         ]);
     }
