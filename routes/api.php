@@ -8,9 +8,16 @@ use App\Http\Controllers\MarkPlayedController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UpdateDatabaseController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/user', function (Request
+$request) {
+    $user = User::with('permissions')->find($request->user()->id);
+    return $user;
+})->middleware('auth:sanctum');
 
 Route::get(
     '/build-deck/{numPlayers}',

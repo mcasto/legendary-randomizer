@@ -26,8 +26,6 @@ class User extends Authenticatable
         'data_id'
     ];
 
-    protected $appends = ['permissions'];
-
     /**
      * The attributes that should be hidden for serialization.
      *

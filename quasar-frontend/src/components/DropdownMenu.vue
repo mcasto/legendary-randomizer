@@ -43,5 +43,28 @@
         </q-item-label>
       </q-item-section>
     </q-item>
+    <q-item v-if="permissions.length > 0" clickable to="/admin">
+      <q-item-section avatar>
+        <q-icon name="mdi-cogs"></q-icon>
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>
+          Admin
+        </q-item-label>
+      </q-item-section>
+    </q-item>
   </q-list>
 </template>
+
+<script setup>
+import { useStore } from "src/stores/store";
+import { computed, onMounted, ref } from "vue";
+
+const store = useStore();
+
+const permissions = computed(() => {
+  return store.user.permissions;
+});
+
+console.log({ permissions: permissions.value });
+</script>

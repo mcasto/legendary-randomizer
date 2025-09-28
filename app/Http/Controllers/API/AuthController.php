@@ -58,7 +58,7 @@ class AuthController extends ResController
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             /** @var \App\Models\User $user **/
-            $user = $request->user();
+            $user = User::with('permissions')->find($request->user()->id);
 
             return response()->json([
                 'status' => 'success',

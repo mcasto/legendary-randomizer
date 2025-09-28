@@ -1,12 +1,35 @@
-import { before } from "lodash-es";
 import { Notify } from "quasar";
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 
 const routes = [
   {
+    path: "/admin",
+    component: () => import("pages/AdminPage.vue"),
+    beforeEnter: () => {
+      const store = useStore();
+      if (!store.user?.permissions) {
+        store.router.push("/login");
+        return;
+      }
+
+      if (store.user.permissions.length == 0) {
+        store.router.push("/login");
+        return;
+      }
+    },
+  },
+  {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
+    beforeEnter: () => {
+      const store = useStore();
+      if (store.token) {
+        callApi({ path: "/user", method: "get", useAuth: true }).then(
+          (user) => (store.user = user)
+        );
+      }
+    },
     children: [
       {
         path: "",
