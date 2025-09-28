@@ -58,12 +58,13 @@ class AuthController extends ResController
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             /** @var \App\Models\User $user **/
-            $user = Auth::user();
+            $user = $request->user();
 
             return response()->json([
                 'status' => 'success',
                 'token' => $user->createToken('AuthToken')->plainTextToken,
                 'user' => [
+                    'permissions' => $user->permissions,
                     'default_view' => $user->default_view,
                     'name' => $user->name
                 ]
@@ -76,9 +77,9 @@ class AuthController extends ResController
         }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        $user = Auth::user();
+        $user = $request->user();
         $user->currentAccessToken()->delete();
         return response()->json(['status' => 'success']);
     }

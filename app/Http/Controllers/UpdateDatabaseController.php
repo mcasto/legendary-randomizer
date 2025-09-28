@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Henchmen;
+use App\Models\Hero;
+use App\Models\Keyword;
+use App\Models\Mastermind;
+use App\Models\MinPlayer;
+use App\Models\Scheme;
+use App\Models\Set;
+use App\Models\Team;
+use App\Models\Villain;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use PDO;
+
+class UpdateDatabaseController extends Controller
+{
+    private $modelMap = [
+        'sets' => Set::class,
+        'keywords' => Keyword::class,
+        'teams' => Team::class,
+        'masterminds' => Mastermind::class,
+        'villains' => Villain::class,
+        'henchmens' => Henchmen::class,
+        'heroes' => Hero::class,
+        'schemes' => Scheme::class
+    ];
+
+    private function compileKeywordDetails($array)
+    {
+        $html = '';
+        if (is_string($array)) return $array;
+
+
+        foreach ($array as $key => $value) {
+            if ($key == 'icon') {
+                $html .= '<img src="/images/icon/' . $value . '.svg"  width="30px" height="15px" style="object-fit: cover;">';
+                continue;
+            }
+
+            if (is_array($value)) {
+                if ($key === 'points') {
+                    $html .= '<ul>';
+                    foreach ($value as $subArray) {
+                        $html .= '<li>' . $this->compileKeywordDetails($subArray) . '</li>';
+                    }
+                    $html .= '</ul>';
+                } else {
+                    $html .= $this->compileKeywordDetails($value);
+                }
+            } else {
+                if ($key === 'bold') {
+                    $html .= '<strong>' . $value . '</strong>';
+                } else {
+                    $html .= $value;
+                }
+            }
+        }
+        return $html;
+    }
+
+    public function update(Request $request)
+    {
+        foreach ($request->all() as $table => $recs) {
+            $model = $this->modelMap[$table];
+            $model::query()->delete();
+            foreach ($recs as $rec) {
+                if ($rec['id'] > -1) {
+                    $model::create($rec);
+
+                    if ($table == 'schemes') {
+                        $minPlayers = MinPlayer::where('scheme_id', $rec['id'])
+                            ->first();
+                        if (!$minPlayers) {
+                            MinPlayer::create([
+                                'scheme_id' => $rec['id'],
+                                'players' => 1
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return ['message' => 'Database updated'];
+    }
+}

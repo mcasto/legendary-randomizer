@@ -11,7 +11,7 @@ class Mastermind extends Model
         'name',
         'set',
         'always_leads',
-        'handler_done'
+
     ];
 
     public function candidates()

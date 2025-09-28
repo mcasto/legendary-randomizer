@@ -1,12 +1,8 @@
-✔ handle veiled/unveiled schemes @done(25-08-09 20:04)
-✔ add mark played @done(25-08-09 19:18)
-✔ add clear game @done(25-08-09 19:18)
-✔ ensure use_played_counts is used @done(25-08-09 19:18)
-✔ ensure use_epics is used in deck build @done(25-08-09 19:18)
-✔ fix all the entityType named params in handlers (really, fix all handlers) @done(25-09-25 10:35)
-☐ check handling of veiled/unveiled schemes
-☐ determine why there are schemes with same name in multiple sets
-☐ basically, write a full master-strike-parser and get it working
-✔ Fix House of M scheme @done(25-09-25 10:36)
+☐ build an admin section to do things like assign min players to schemes
+☐ check make:handler to see how it gets twists for scheme
+☐ run make:handler (or equivalent) when updating database
+
+✔ determine why there are schemes with same name in multiple sets @done(25-09-27 22:04)
+✔ basically, write a full master-strike-parser and get it working @done(25-09-27 22:04)
 
 ☐ replace sendgrid with mailersend

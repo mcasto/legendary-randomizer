@@ -55,6 +55,8 @@ import { computed } from "vue";
 
 const store = useStore();
 
+console.log({ user: store.user });
+
 const ViewComponent = computed(() => {
   return store.view == "heroes" ? HeroesView : EnemiesView;
 });

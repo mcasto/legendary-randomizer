@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,6 +25,8 @@ class User extends Authenticatable
         'password',
         'data_id'
     ];
+
+    protected $appends = ['permissions'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -145,5 +148,10 @@ class User extends Authenticatable
             'settings' => $this->userSettings,
             'displays' => $displays,
         ];
+    }
+
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(UserPermission::class);
     }
 }

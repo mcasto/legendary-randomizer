@@ -7,6 +7,7 @@ use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\MarkPlayedController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\UpdateDatabaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
@@ -68,3 +69,7 @@ Route::put('/settings', [SettingsController::class, 'update'])
 Route::put('/mark-played', [MarkPlayedController::class, 'update'])
     ->middleware('auth:sanctum')
     ->name('mark-played');
+
+Route::post('/update-db', [UpdateDatabaseController::class, 'update'])
+    ->middleware('auth:sanctum')
+    ->name('update-db');
