@@ -9,6 +9,7 @@ export const useStore = defineStore(
   "store",
   () => {
     const state = {
+      admin: ref({}),
       entities: ref(null),
       game: ref(null),
       expired: ref(null),

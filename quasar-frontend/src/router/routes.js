@@ -6,7 +6,7 @@ const routes = [
   {
     path: "/admin",
     component: () => import("pages/AdminPage.vue"),
-    beforeEnter: () => {
+    beforeEnter: async () => {
       const store = useStore();
       if (!store.user?.permissions) {
         store.router.push("/login");
@@ -17,7 +17,14 @@ const routes = [
         store.router.push("/login");
         return;
       }
+
+      store.admin.schemes = await callApi({
+        path: "/schemes",
+        method: "get",
+        useAuth: true,
+      });
     },
+    meta: { requireAuth: true },
   },
   {
     path: "/",

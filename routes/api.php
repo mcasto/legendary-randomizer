@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EntitiesController;
 use App\Http\Controllers\BuildDeckController;
@@ -80,3 +81,9 @@ Route::put('/mark-played', [MarkPlayedController::class, 'update'])
 Route::post('/update-db', [UpdateDatabaseController::class, 'update'])
     ->middleware('auth:sanctum')
     ->name('update-db');
+
+Route::get('/schemes', [AdminController::class, 'schemesIndex'])
+    ->middleware('auth:sanctum');
+
+Route::put('/schemes/{id}', [AdminController::class, 'updateScheme'])
+    ->middleware('auth:sanctum');

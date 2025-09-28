@@ -65,6 +65,4 @@ const store = useStore();
 const permissions = computed(() => {
   return store.user.permissions;
 });
-
-console.log({ permissions: permissions.value });
 </script>

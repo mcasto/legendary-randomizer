@@ -9,6 +9,12 @@ class Scheme extends Model
 {
     protected $appends = ['minPlayers'];
 
+    public function getMinPlayersAttribute()
+    {
+        // Return the actual value you want to append
+        return $this->minPlayers()->value('players'); // example
+    }
+
     protected $fillable = [
         'id',
         'name',
