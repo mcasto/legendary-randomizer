@@ -72,7 +72,7 @@ class EntityService
         );
 
         // remove candidate
-        $mastermind->delete();
+        $this->removeCandidate($mastermind->id);
 
         if ($runHandler) {
             $this->runHandler('masterminds', $mastermind['entity_id']);

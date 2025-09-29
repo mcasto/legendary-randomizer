@@ -12,8 +12,6 @@ use App\Models\Set;
 use App\Models\Team;
 use App\Models\Villain;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use PDO;
 
 class UpdateDatabaseController extends Controller
 {
