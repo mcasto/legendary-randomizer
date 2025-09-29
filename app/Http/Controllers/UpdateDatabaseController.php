@@ -12,6 +12,7 @@ use App\Models\Set;
 use App\Models\Team;
 use App\Models\Villain;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UpdateDatabaseController extends Controller
 {
@@ -59,8 +60,27 @@ class UpdateDatabaseController extends Controller
         return $html;
     }
 
+    private function sanitize_class_name($input)
+    {
+        // Remove any characters that aren't allowed in class names (including Unicode punctuation)
+        $sanitized = preg_replace('/[^\p{L}\p{N}\s_\x7f-\xff]/u', '', $input);
+
+        // Ensure the first character is valid (letter or underscore)
+        if (!preg_match('/^[\p{L}_\x7f-\xff]/u', $sanitized)) {
+            // If not, prepend an underscore
+            $sanitized = '_' . $sanitized;
+        }
+
+        // Convert to StudlyCase
+        $sanitized = Str::studly($sanitized);
+
+        return $sanitized;
+    }
+
     public function update(Request $request)
     {
+        $handlers = ['masterminds' => [], 'schemes' => []];
+
         foreach ($request->all() as $table => $recs) {
             $model = $this->modelMap[$table];
             $model::query()->delete();
@@ -78,10 +98,26 @@ class UpdateDatabaseController extends Controller
                             ]);
                         }
                     }
+
+                    if ($table == 'schemes' || $table == 'masterminds') {
+                        $set = Set::where('value', $rec['set'])
+                            ->first();
+                        $handlerName = $this->sanitize_class_name($rec['name']) . "_" . $this->sanitize_class_name($set->label);
+
+                        $filename = dirname(__DIR__, 2) . '/Handlers/' . Str::studly($table) . '/' . $handlerName . '.php';
+
+                        $handlerExists = file_exists($filename);
+
+                        logger()->info(['table' => $table, 'handlerName' => $handlerName, 'exists' => $handlerExists]);
+
+                        if (!$handlerExists) {
+                            $handlers[$table][] = $rec['name'];
+                        }
+                    }
                 }
             }
         }
 
-        return ['message' => 'Database updated'];
+        return ['message' => 'Database updated', 'handlers' => $handlers];
     }
 }
