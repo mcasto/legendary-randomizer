@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Deck;
-use App\Models\User;
 use App\Services\EntityService;
 use App\Services\OutputDeckService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class BuildDeckController extends Controller
 {
