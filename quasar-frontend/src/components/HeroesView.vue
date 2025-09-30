@@ -75,6 +75,4 @@ import IconDisplay from "./IconDisplay.vue";
 import { isEmpty } from "lodash-es";
 
 const store = useStore();
-
-console.log(store.game?.deck?.heroes);
 </script>

@@ -9,7 +9,6 @@ use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\MarkPlayedController;
 use App\Http\Controllers\SetController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\UpdateDatabaseController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +20,8 @@ $request) {
     return $user;
 })->middleware('auth:sanctum');
 
-Route::get('/handlers-required', [HandlerController::class, 'index']);
+Route::get('/handlers-required', [HandlerController::class, 'index'])
+    ->middleware('auth:sanctum');
 
 Route::get(
     '/build-deck/{numPlayers}',

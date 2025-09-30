@@ -4,6 +4,7 @@ import logout from "./actions/logout";
 import login from "./actions/login";
 import verifyToken from "./actions/verify-token";
 import buildDeck from "./actions/build-deck";
+import requiredHandlers from "./actions/handlers-required";
 
 export const useStore = defineStore(
   "store",
@@ -13,6 +14,7 @@ export const useStore = defineStore(
       entities: ref(null),
       game: ref(null),
       expired: ref(null),
+      handlersRequired: ref(null),
       keywords: ref(null),
       sets: ref(null),
       settings: ref(null),
@@ -27,6 +29,7 @@ export const useStore = defineStore(
       buildDeck,
       login,
       logout,
+      requiredHandlers,
       verifyToken,
     };
 

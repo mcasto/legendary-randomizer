@@ -23,6 +23,8 @@ const routes = [
         method: "get",
         useAuth: true,
       });
+
+      await store.requiredHandlers();
     },
     meta: { requireAuth: true },
   },

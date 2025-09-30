@@ -77,7 +77,5 @@ const saveOptions = async () => {
     payload: scheme.value,
     useAuth: true,
   });
-
-  console.log({ response });
 };
 </script>

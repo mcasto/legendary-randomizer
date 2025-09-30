@@ -9,6 +9,7 @@
               :key="permission.id"
               clickable
               :active="permission.level == section"
+              @click="section = permission.level"
             >
               <q-item-section>
                 <q-item-label>
@@ -22,6 +23,7 @@
       <template #after>
         <div>
           <admin-schemes v-if="section == 'schemes'"></admin-schemes>
+          <admin-handlers v-if="section == 'handlers'"></admin-handlers>
         </div>
       </template>
     </q-splitter>
@@ -33,6 +35,7 @@ import { uid } from "quasar";
 import { useStore } from "src/stores/store";
 import { computed, ref } from "vue";
 import AdminSchemes from "./AdminSchemes.vue";
+import AdminHandlers from "./AdminHandlers.vue";
 
 const store = useStore();
 
