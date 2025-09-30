@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EntitiesController;
 use App\Http\Controllers\BuildDeckController;
+use App\Http\Controllers\HandlerController;
 use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\MarkPlayedController;
 use App\Http\Controllers\SetController;
@@ -20,9 +21,7 @@ $request) {
     return $user;
 })->middleware('auth:sanctum');
 
-Route::get('/test', function () {
-    return ['test' => true];
-});
+Route::get('/handlers-required', [HandlerController::class, 'index']);
 
 Route::get(
     '/build-deck/{numPlayers}',
