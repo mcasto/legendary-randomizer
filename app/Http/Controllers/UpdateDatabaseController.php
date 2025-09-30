@@ -18,8 +18,6 @@ use Illuminate\Support\Str;
 
 class UpdateDatabaseController extends Controller
 {
-    // test
-
     private $modelMap = [
         'sets' => Set::class,
         'keywords' => Keyword::class,
