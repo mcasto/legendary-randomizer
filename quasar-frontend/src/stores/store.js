@@ -4,7 +4,7 @@ import logout from "./actions/logout";
 import login from "./actions/login";
 import verifyToken from "./actions/verify-token";
 import buildDeck from "./actions/build-deck";
-import requiredHandlers from "./actions/handlers-required";
+import requiredHandlers from "./actions/required-handlers";
 
 export const useStore = defineStore(
   "store",
