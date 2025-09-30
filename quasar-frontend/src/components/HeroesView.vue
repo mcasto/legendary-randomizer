@@ -1,5 +1,13 @@
 <template>
-  <div class="full-width">
+  <div
+    v-if="isEmpty(store.game?.deck)"
+    class="flex flex-center text-h6"
+    style="height: 100vh;"
+  >
+    No Active Game
+  </div>
+
+  <div class="full-width" v-else>
     <q-list
       separator
       :style="`background-color:${
@@ -64,6 +72,9 @@
 <script setup>
 import { useStore } from "src/stores/store";
 import IconDisplay from "./IconDisplay.vue";
+import { isEmpty } from "lodash-es";
 
 const store = useStore();
+
+console.log(store.game?.deck?.heroes);
 </script>

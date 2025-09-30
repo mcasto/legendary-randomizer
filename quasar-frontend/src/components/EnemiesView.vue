@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div
+      v-if="isEmpty(store.game?.deck)"
+      class="flex flex-center text-h6"
+      style="height: 100vh;"
+    >
+      No Active Game
+    </div>
+
     <enemy-list
       v-for="display in displays"
       :key="display.key"
@@ -8,6 +16,7 @@
       :bg="display.bg"
       :text="display.text"
       class="q-mb-xs"
+      v-else
     ></enemy-list>
   </div>
 </template>
@@ -15,7 +24,7 @@
 <script setup>
 import { useStore } from "src/stores/store";
 import EnemyList from "./EnemyList.vue";
-import { startCase } from "lodash-es";
+import { isEmpty, startCase } from "lodash-es";
 
 const store = useStore();
 const displays = Object.entries(store.settings?.displays || {})

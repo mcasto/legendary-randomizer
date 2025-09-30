@@ -6,7 +6,7 @@
         <q-form @submit="store.login({ email, password })">
           <div class="column q-gutter-y-sm">
             <q-input
-              type="text"
+              type="email"
               label="Email"
               v-model="email"
               dense

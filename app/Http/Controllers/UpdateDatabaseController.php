@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Henchmen;
 use App\Models\Hero;
+use App\Models\HeroColor;
+use App\Models\HeroTeam;
 use App\Models\Keyword;
 use App\Models\Mastermind;
 use App\Models\MinPlayer;
@@ -79,6 +81,8 @@ class UpdateDatabaseController extends Controller
 
     public function update(Request $request)
     {
+        file_put_contents(__DIR__ . '/request.json', json_encode($request->all(), JSON_PRETTY_PRINT));
+
         $handlers = ['masterminds' => [], 'schemes' => []];
 
         foreach ($request->all() as $table => $recs) {
@@ -108,10 +112,24 @@ class UpdateDatabaseController extends Controller
 
                         $handlerExists = file_exists($filename);
 
-                        logger()->info(['table' => $table, 'handlerName' => $handlerName, 'exists' => $handlerExists]);
-
                         if (!$handlerExists) {
                             $handlers[$table][] = $rec['name'];
+                        }
+                    }
+
+                    if ($table == 'heroes') {
+                        foreach ($rec['colors'] as $color) {
+                            HeroColor::create([
+                                'hero_id' => $rec['id'],
+                                'color_id' => $color
+                            ]);
+                        }
+
+                        foreach ($rec['teams'] as $team) {
+                            HeroTeam::create([
+                                'hero_id' => $rec['id'],
+                                'team_id' => $team
+                            ]);
                         }
                     }
                 }
