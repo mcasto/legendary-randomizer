@@ -13,12 +13,21 @@
               outlined
             ></q-input>
             <q-input
-              type="text"
+              :type="showPass ? 'text' : 'password'"
               label="Password"
               v-model="password"
               dense
               outlined
-            ></q-input>
+            >
+              <template #append>
+                <q-btn
+                  :icon="showPass ? 'visibility_off' : 'visibility'"
+                  round
+                  flat
+                  @click="showPass = !showPass"
+                ></q-btn>
+              </template>
+            </q-input>
             <div class="flex justify-end">
               <q-btn type="submit" label="Login" color="primary"></q-btn>
             </div>
@@ -35,6 +44,8 @@ import { ref } from "vue";
 const isDev = import.meta.env.DEV;
 
 const store = useStore();
+
+const showPass = ref(false);
 
 const email = ref(isDev ? "castoware@gmail.com" : null);
 const password = ref(isDev ? "lovemeg0524" : null);
