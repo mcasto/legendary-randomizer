@@ -20,6 +20,10 @@ $request) {
     return $user;
 })->middleware('auth:sanctum');
 
+Route::get('/test', function () {
+    return ['test' => true];
+});
+
 Route::get(
     '/build-deck/{numPlayers}',
     [
@@ -77,10 +81,6 @@ Route::put('/settings', [SettingsController::class, 'update'])
 Route::put('/mark-played', [MarkPlayedController::class, 'update'])
     ->middleware('auth:sanctum')
     ->name('mark-played');
-
-Route::post('/update-db', [UpdateDatabaseController::class, 'update'])
-    ->middleware('auth:sanctum')
-    ->name('update-db');
 
 Route::get('/schemes', [AdminController::class, 'schemesIndex'])
     ->middleware('auth:sanctum');
