@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('min_players', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Scheme::class);
+            $table->foreignIdFor(Scheme::class)->constrained()->onDelete('cascade');
             $table->integer('players')->default(1);
             $table->timestamps();
         });
