@@ -24,6 +24,9 @@ $request) {
 Route::get('/game', [GameController::class, 'show'])
     ->middleware('auth:sanctum');
 
+Route::delete('/game/{id}', [GameController::class, 'destroy'])
+    ->middleware('auth:sanctum');
+
 Route::get('/handlers-required', [HandlerController::class, 'index'])
     ->middleware('auth:sanctum');
 

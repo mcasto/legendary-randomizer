@@ -87,6 +87,16 @@ const markPlayed = async () => {
 };
 
 const clearGame = async () => {
+  const doClearGame = async () => {
+    const response = await callApi({
+      path: `/game/${store.game.setup.id}`,
+      method: "delete",
+      useAuth: true,
+    });
+    console.log({ response });
+    // store.game=null;
+  };
+
   if (!store.expired) {
     Notify.create({
       type: "warning",
@@ -98,13 +108,13 @@ const clearGame = async () => {
         {
           label: "Yes",
           handler: async () => {
-            store.game = null;
+            doClearGame();
           },
         },
       ],
     });
   } else {
-    store.game = null;
+    doClearGame();
   }
 };
 

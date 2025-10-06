@@ -1,4 +1,6 @@
-☐ build an admin section to do things like assign min players to schemes
+☐ when new game gets created for a user, delete all that user's setups
+
+✔ build an admin section to do things like assign min players to schemes @done(25-10-06 10:08)
 ☐ check make:handler to see how it gets twists for scheme
 ☐ run make:handler (or equivalent) when updating database
 

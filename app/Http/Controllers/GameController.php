@@ -39,6 +39,7 @@ class GameController extends Controller
 
     public function destroy(int $id, Request $request)
     {
-        //
+        $setup = Setup::find($id);
+        return ['setup' => $setup];
     }
 }

@@ -10,6 +10,8 @@ class BuildDeckController extends Controller
 {
     public function show(Request $request, int $numPlayers)
     {
+
+
         $schemeID = $request->input('scheme') ?? null;
         $mastermindID = $request->input('mastermind') ?? null;
 
