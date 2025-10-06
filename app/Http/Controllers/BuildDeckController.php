@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setup;
 use App\Services\EntityService;
 use App\Services\OutputDeckService;
 use Illuminate\Http\Request;
@@ -10,7 +11,8 @@ class BuildDeckController extends Controller
 {
     public function show(Request $request, int $numPlayers)
     {
-
+        // delete all setups for this data_id
+        Setup::where('data_id', $request->user()->data_id)->get()->each->delete();
 
         $schemeID = $request->input('scheme') ?? null;
         $mastermindID = $request->input('mastermind') ?? null;

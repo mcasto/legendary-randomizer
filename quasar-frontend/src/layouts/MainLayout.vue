@@ -93,8 +93,13 @@ const clearGame = async () => {
       method: "delete",
       useAuth: true,
     });
-    console.log({ response });
-    // store.game=null;
+
+    if (response.status != "success") {
+      Notify.create({ type: "negative", message: response.message });
+      return;
+    }
+
+    store.game = null;
   };
 
   if (!store.expired) {

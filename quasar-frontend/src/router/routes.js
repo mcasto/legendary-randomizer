@@ -1,5 +1,6 @@
 import { Notify } from "quasar";
 import callApi from "src/assets/call-api";
+import refreshGame from "src/assets/refresh-game";
 import { useStore } from "src/stores/store";
 
 const routes = [
@@ -33,6 +34,7 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     beforeEnter: async () => {
       const store = useStore();
+
       if (store.token) {
         if (!store.user)
           store.user = await callApi({
@@ -41,19 +43,7 @@ const routes = [
             useAuth: true,
           });
 
-        if (!store.game) {
-          const response = await callApi({
-            path: "/game",
-            method: "get",
-            useAuth: true,
-          });
-
-          if (response.status != "success") {
-            Notify.create({ type: "negative", message: response.message });
-            return;
-          }
-          store.game = response.game;
-        }
+        await refreshGame();
       }
     },
     children: [

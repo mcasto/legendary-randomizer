@@ -16,30 +16,35 @@ class GameController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        try {
-            $result = OutputDeckService::build($setup);
+        if ($setup) {
+            try {
+                $result = OutputDeckService::build($setup);
 
-            return response()->json([
-                'status' => 'success',
-                'game' => [
-                    'setup' => $result['setup'],
-                    'deck' => $result['deck']
-                ],
-                'expected' => $result['expected']
-            ]);
-        } catch (\RuntimeException $e) {
-            logger()->error($e->getMessage());
+                return response()->json([
+                    'status' => 'success',
+                    'game' => [
+                        'setup' => $result['setup'],
+                        'deck' => $result['deck']
+                    ],
+                    'expected' => $result['expected']
+                ]);
+            } catch (\RuntimeException $e) {
+                logger()->error($e->getMessage());
 
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 422);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ], 422);
+            }
         }
+
+        return ['status' => 'success', 'game' => null, 'expected' => null];
     }
 
     public function destroy(int $id, Request $request)
     {
         $setup = Setup::find($id);
-        return ['setup' => $setup];
+        $setup->delete();
+        return ['status' => 'success'];
     }
 }
