@@ -41,12 +41,11 @@
 <script setup>
 import { useStore } from "src/stores/store";
 import { ref } from "vue";
-const isDev = import.meta.env.DEV;
 
 const store = useStore();
 
 const showPass = ref(false);
 
-const email = ref(isDev ? "castoware@gmail.com" : null);
-const password = ref(isDev ? "lovemeg0524" : null);
+const email = ref(null);
+const password = ref(null);
 </script>
