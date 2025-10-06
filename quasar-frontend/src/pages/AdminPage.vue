@@ -1,5 +1,11 @@
 <template>
   <div>
+    <q-toolbar class="shadow-1">
+      <q-toolbar-title>
+        Admin
+      </q-toolbar-title>
+      <q-btn icon="home" to="/" flat></q-btn>
+    </q-toolbar>
     <q-splitter :model-value="25">
       <template #before>
         <div style="height: 100vh;">
