@@ -1,6 +1,7 @@
 import callApi from "src/assets/call-api";
 import { useStore } from "../store";
 import { Loading, Notify } from "quasar";
+import { parseISO } from "date-fns";
 
 const runBuildDeck = (numPlayers) => {
   const store = useStore();
@@ -41,8 +42,10 @@ const runBuildDeck = (numPlayers) => {
 
     store.game = {
       ...response.game,
-      created: Date.now(),
+      created: parseISO(response.game.created),
     };
+
+    console.log({ created: store.game.created });
 
     if (route.fullPath != "/") {
       store.router.push({ name: "index" });

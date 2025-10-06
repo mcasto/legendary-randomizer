@@ -45,10 +45,12 @@ class OutputDeckService
         // alphabetize the entities in each section of the deck
         $sections = ['schemes', 'masterminds', 'villains', 'henchmen', 'heroes'];
         foreach ($sections as $section) {
-            $output['deck'][$section] = collect($output['deck'][$section])
-                ->sortBy('name')
-                ->values()
-                ->all();
+            if (isset($output['deck'][$section])) {
+                $output['deck'][$section] = collect($output['deck'][$section])
+                    ->sortBy('name')
+                    ->values()
+                    ->all();
+            }
         }
 
         return $output;

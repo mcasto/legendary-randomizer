@@ -24,7 +24,8 @@ class GameController extends Controller
                     'status' => 'success',
                     'game' => [
                         'setup' => $result['setup'],
-                        'deck' => $result['deck']
+                        'deck' => $result['deck'],
+                        'created' => $setup->created_at
                     ],
                     'expected' => $result['expected']
                 ]);

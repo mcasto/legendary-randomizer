@@ -1,6 +1,7 @@
 import { useStore } from "src/stores/store";
 import callApi from "./call-api";
 import { Notify } from "quasar";
+import { parseISO } from "date-fns";
 
 export default async () => {
   const store = useStore();
@@ -16,7 +17,10 @@ export default async () => {
     return;
   }
 
-  store.game = response.game;
+  store.game = {
+    ...response.game,
+    // created: parseISO(response.game.created),
+  };
 
   setInterval(async () => {
     const response = await callApi({

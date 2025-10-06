@@ -57,7 +57,8 @@ class BuildDeckController extends Controller
                 'status' => 'success',
                 'game' => [
                     'setup' => $result['setup'],
-                    'deck' => $result['deck']
+                    'deck' => $result['deck'],
+                    'created' => $es->setup->created_at
                 ],
                 'expected' => $result['expected']
             ]);
