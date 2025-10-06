@@ -84,6 +84,8 @@ const markPlayed = async () => {
     },
     useAuth: true,
   });
+
+  clearGame();
 };
 
 const clearGame = async () => {

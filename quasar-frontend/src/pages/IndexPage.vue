@@ -30,7 +30,7 @@
       <div class="text-subtitle2">
         {{ store.view.toUpperCase() }}
       </div>
-      <div class="text-caption" v-if="store.game?.setup.players">
+      <div class="text-caption" v-if="store.game?.setup?.players">
         {{ store.game?.setup.players }} Players
       </div>
     </q-toolbar-title>

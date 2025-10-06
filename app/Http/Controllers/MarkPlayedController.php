@@ -29,5 +29,7 @@ class MarkPlayedController extends Controller
                 'entity_id' => $entity['entity_id']
             ]);
         });
+
+        return ['status' => 'success'];
     }
 }
