@@ -38,6 +38,7 @@ export const useStore = defineStore(
   {
     persist: {
       key: "legendary-randomizer-2025",
+      omit: ["game"],
     },
   }
 );

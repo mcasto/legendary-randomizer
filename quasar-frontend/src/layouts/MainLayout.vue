@@ -86,7 +86,7 @@ const markPlayed = async () => {
   });
 };
 
-const clearGame = () => {
+const clearGame = async () => {
   if (!store.expired) {
     Notify.create({
       type: "warning",
@@ -97,7 +97,7 @@ const clearGame = () => {
         },
         {
           label: "Yes",
-          handler: () => {
+          handler: async () => {
             store.game = null;
           },
         },

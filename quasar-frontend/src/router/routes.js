@@ -31,12 +31,29 @@ const routes = [
   {
     path: "/",
     component: () => import("layouts/MainLayout.vue"),
-    beforeEnter: () => {
+    beforeEnter: async () => {
       const store = useStore();
       if (store.token) {
-        callApi({ path: "/user", method: "get", useAuth: true }).then(
-          (user) => (store.user = user)
-        );
+        if (!store.user)
+          store.user = await callApi({
+            path: "/user",
+            method: "get",
+            useAuth: true,
+          });
+
+        if (!store.game) {
+          const response = await callApi({
+            path: "/game",
+            method: "get",
+            useAuth: true,
+          });
+
+          if (response.status != "success") {
+            Notify.create({ type: "negative", message: response.message });
+            return;
+          }
+          store.game = response.game;
+        }
       }
     },
     children: [

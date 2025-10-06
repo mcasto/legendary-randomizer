@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\EntitiesController;
 use App\Http\Controllers\BuildDeckController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\HandlerController;
 use App\Http\Controllers\KeywordController;
 use App\Http\Controllers\MarkPlayedController;
@@ -19,6 +20,9 @@ $request) {
     $user = User::with('permissions')->find($request->user()->id);
     return $user;
 })->middleware('auth:sanctum');
+
+Route::get('/game', [GameController::class, 'show'])
+    ->middleware('auth:sanctum');
 
 Route::get('/handlers-required', [HandlerController::class, 'index'])
     ->middleware('auth:sanctum');

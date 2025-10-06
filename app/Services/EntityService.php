@@ -22,9 +22,9 @@ class EntityService
         ?int $numPlayers = null,
         ?string $dataID = null,
     ) {
-
         if (!$setup_id) {
             $setup = DefaultSetup::where('players', $numPlayers)
+                ->select(['id', 'players', 'schemes', 'twists', 'masterminds', 'villains', 'henchmen', 'heroes', 'bystanders', 'wounds', 'officers', 'shards'])
                 ->first()
                 ->toArray();
 
