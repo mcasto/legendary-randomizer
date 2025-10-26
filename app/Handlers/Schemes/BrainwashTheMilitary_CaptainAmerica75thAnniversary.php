@@ -20,6 +20,7 @@ class BrainwashTheMilitary_CaptainAmerica75thAnniversary extends BaseHandler
     protected function handle(): void
     {
         $this->setup->twists = 7;
+        $this->setup->villains++;
 
         // create special entity
         $entity = SpecialEntity::create([
