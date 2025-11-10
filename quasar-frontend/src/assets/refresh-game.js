@@ -13,7 +13,10 @@ export default async () => {
   });
 
   if (response.status != "success") {
-    Notify.create({ type: "negative", message: response.message });
+    Notify.create({
+      type: "negative",
+      message: response.message || "refresh-game-js-01",
+    });
     return;
   }
 
@@ -30,7 +33,10 @@ export default async () => {
     });
 
     if (response.status != "success") {
-      Notify.create({ type: "negative", message: response.message });
+      Notify.create({
+        type: "negative",
+        message: response.message || "refresh-game-js-02",
+      });
       return;
     }
 

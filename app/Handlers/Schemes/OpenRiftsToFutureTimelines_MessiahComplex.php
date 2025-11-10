@@ -19,7 +19,6 @@ class OpenRiftsToFutureTimelines_MessiahComplex extends BaseHandler
      */
     protected function handle(): void
     {
-
         $this->setup->villains++;
 
         // get additional villain

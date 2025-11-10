@@ -97,7 +97,10 @@ const clearGame = async () => {
     });
 
     if (response.status != "success") {
-      Notify.create({ type: "negative", message: response.message });
+      Notify.create({
+        type: "negative",
+        message: response.message || "main-layout-vue",
+      });
       return;
     }
 

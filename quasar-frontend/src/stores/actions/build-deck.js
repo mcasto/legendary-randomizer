@@ -45,8 +45,6 @@ const runBuildDeck = (numPlayers) => {
       created: parseISO(response.game.created),
     };
 
-    console.log({ created: store.game.created });
-
     if (route.fullPath != "/") {
       store.router.push({ name: "index" });
     }
