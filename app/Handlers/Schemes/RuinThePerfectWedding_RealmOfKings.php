@@ -18,6 +18,7 @@ class RuinThePerfectWedding_RealmOfKings extends BaseHandler
     {
         $this->setup->twists = 11;
         $this->setup->heroes += 2;
+        $this->setup->villains += 2;
 
         // get wedding heroes
         $heroes = $this->es->getCandidate(entityType: 'heroes', take: 2);
