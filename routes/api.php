@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/user', function (Request
 $request) {
@@ -93,3 +94,8 @@ Route::get('/schemes', [AdminController::class, 'schemesIndex'])
 
 Route::put('/schemes/{id}', [AdminController::class, 'updateScheme'])
     ->middleware('auth:sanctum');
+
+Route::post('/log-refresh-error', function (Request $request) {
+    Storage::disk('local')
+        ->put('refresh-error.json', json_encode($request->all(), JSON_PRETTY_PRINT));
+});

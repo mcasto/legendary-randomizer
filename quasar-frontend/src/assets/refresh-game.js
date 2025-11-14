@@ -33,9 +33,15 @@ export default async () => {
       useAuth: true,
     });
 
-    console.log({ response });
-
     if (response.status != "success") {
+      if (!response.message) {
+        await callApi({
+          path: "/log-refresh-error",
+          method: "post",
+          payload: response,
+        });
+      }
+
       Notify.create({
         type: "negative",
         message: response.message || "refresh-game-js-02",
