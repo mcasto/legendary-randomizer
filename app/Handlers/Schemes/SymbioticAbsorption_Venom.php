@@ -20,7 +20,6 @@ class SymbioticAbsorption_Venom extends BaseHandler
     {
         $this->setup->twists = 11;
         $this->setup->masterminds++;
-        $this->setup->villains++;
 
         // get special mastermind candidate (need full candidate to get always leads)
         $response = $this->mastermindWithAlwaysLeads();
