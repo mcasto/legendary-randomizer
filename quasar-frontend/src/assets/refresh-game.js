@@ -2,6 +2,7 @@ import { useStore } from "src/stores/store";
 import callApi from "./call-api";
 import { Notify } from "quasar";
 import { parseISO } from "date-fns";
+import wretch from "wretch";
 
 export default async () => {
   const store = useStore();
@@ -31,6 +32,8 @@ export default async () => {
       method: "get",
       useAuth: true,
     });
+
+    console.log({ response });
 
     if (response.status != "success") {
       Notify.create({
