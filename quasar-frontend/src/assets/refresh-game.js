@@ -35,11 +35,7 @@ export default async () => {
 
     if (response.status != "success") {
       if (!response.message) {
-        await callApi({
-          path: "/log-refresh-error",
-          method: "post",
-          payload: response,
-        });
+        return;
       }
 
       Notify.create({

@@ -94,8 +94,3 @@ Route::get('/schemes', [AdminController::class, 'schemesIndex'])
 
 Route::put('/schemes/{id}', [AdminController::class, 'updateScheme'])
     ->middleware('auth:sanctum');
-
-Route::post('/log-refresh-error', function (Request $request) {
-    Storage::disk('local')
-        ->put('refresh-error.json', json_encode($request->all(), JSON_PRETTY_PRINT));
-});
