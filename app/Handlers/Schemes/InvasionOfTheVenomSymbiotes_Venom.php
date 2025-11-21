@@ -8,6 +8,7 @@
 namespace App\Handlers\Schemes;
 
 use App\Handlers\BaseHandler;
+use App\Models\Henchmen;
 
 class InvasionOfTheVenomSymbiotes_Venom extends BaseHandler
 {
@@ -18,6 +19,12 @@ class InvasionOfTheVenomSymbiotes_Venom extends BaseHandler
     {
         $this->setup->twists = 8;
         $this->setup->henchmen++;
+
+        $candidate = $this->es->getCandidate(entityType: 'henchmen');
+
+        $hench = Henchmen::find($candidate->entity_id);
+
+        $this->es->addToDeck(candidate: $candidate, section: 'henchmen', special: true);
     }
 }
 
