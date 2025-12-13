@@ -27,6 +27,12 @@ class KillmongerTheBetrayer_MarvelStudiosWhatIf extends BaseHandler
         // get mastermind record
         $mastermind = Mastermind::find(95);
 
+        // find killmonger hero
+        $killmongerHero = $this->es->pullCandidate(entityType: 'heroes', name: '.*Killmonger.*', take: 1, isRegex: true);
+
+        // add to deck
+        $this->es->addToDeck($killmongerHero);
+
         // find always leads candidate
         $alVillain = $this->es->pullCandidate(entityType: 'villains', name: $mastermind->always_leads, take: 1);
 
