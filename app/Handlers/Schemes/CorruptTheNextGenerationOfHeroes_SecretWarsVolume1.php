@@ -19,6 +19,7 @@ class CorruptTheNextGenerationOfHeroes_SecretWarsVolume1 extends BaseHandler
     protected function handle(): void
     {
         $this->setup->twists = 8;
+        $this->setup->villains++;
 
         // create special entity
         $special = SpecialEntity::create([
