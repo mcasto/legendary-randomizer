@@ -20,7 +20,7 @@ class MarkOfKhonshuThe_SecretWarsVolume2 extends BaseHandler
     {
         $this->setup->twists = 10;
         $this->setup->heroes++;
-        $this->setup->villains++;
+        $this->setup->henchmen++;
 
         $guardians = Henchmen::where('name', 'Khonshu Guardians')->first();
         $candidate = $this->es->getCandidate(entityType: 'henchmen', entityId: $guardians->id);
@@ -36,14 +36,14 @@ class MarkOfKhonshuThe_SecretWarsVolume2 extends BaseHandler
         // remove guardians from candidates
         $this->es->removeCandidate($candidate['id']);
 
-        // add hero to villains
-        $this->es->addToDeck(candidate: $hero, section: 'villains', special: true);
+        // add guardian hero to heroes
+        $this->es->addToDeck(candidate: $hero, special: true);
+
+        // add guardian hero to henchmen
+        $this->es->addToDeck(candidate: $hero, section: 'henchmen', special: true);
 
         // add expectation
         $this->addExpectation(candidate: $hero, section: 'villains');
-
-        // add to heroes
-        $this->es->addToDeck(candidate: $candidate, special: true);
 
         // add expectation
         $this->addExpectation(candidate: $candidate);
