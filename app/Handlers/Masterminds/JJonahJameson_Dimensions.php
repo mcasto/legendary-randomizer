@@ -24,8 +24,19 @@ class JJonahJameson_Dimensions extends BaseHandler
             return;
         }
 
-        // for some reason, in the database, it's not Spider-Slayers, it's Spider-Slayer
-        $alwaysLeads = $this->es->pullCandidate(entityType: 'henchmen', name: 'Spider-Slayer', take: 1);
+        // get mastermind record
+        $mastermind = Mastermind::find(61);
+
+        // find always leads candidate
+        $alVillain = $this->es->pullCandidate(entityType: 'villains', name: $mastermind->always_leads, take: 1);
+
+        $alHench = $this->es->pullCandidate(entityType: 'henchmen', name: $mastermind->always_leads, take: 1);
+
+        $alwaysLeads = $alVillain ?? $alHench;
+
+        if (!($alVillain || $alHench)) {
+            dd("Always Leads not found for " . $mastermind->name);
+        }
 
         // add always leads to deck
         $this->es->addToDeck($alwaysLeads);
