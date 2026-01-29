@@ -27,20 +27,12 @@ class JJonahJameson_Dimensions extends BaseHandler
         // get mastermind record
         $mastermind = Mastermind::find(61);
 
-        logger()->info($mastermind);
-
         // find always leads candidate
         $alVillain = $this->es->pullCandidate(entityType: 'villains', name: $mastermind->always_leads, take: 1);
 
-        logger()->info($alVillain);
-
         $alHench = $this->es->pullCandidate(entityType: 'henchmen', name: $mastermind->always_leads, take: 1);
 
-        logger()->info($alHench);
-
         $alwaysLeads = $alVillain ?? $alHench;
-
-        logger()->info($alwaysLeads);
 
         if (!($alVillain || $alHench)) {
             dd("Always Leads not found for " . $mastermind->name);

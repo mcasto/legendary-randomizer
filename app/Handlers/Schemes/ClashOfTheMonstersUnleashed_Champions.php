@@ -20,6 +20,7 @@ class ClashOfTheMonstersUnleashed_Champions extends BaseHandler
     {
         $this->setup->twists = 10;
         $this->setup->wounds = 6 * $this->setup->players;
+        $this->setup->villains++;
 
         // get monsters
         $monsters = $this->es->pullCandidate(entityType: 'villains', name: 'Monsters Unleashed', take: 1);
