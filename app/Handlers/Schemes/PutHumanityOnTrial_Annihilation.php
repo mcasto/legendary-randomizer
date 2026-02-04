@@ -18,6 +18,7 @@ class PutHumanityOnTrial_Annihilation extends BaseHandler
     protected function handle(): void
     {
         $this->setup->twists = 11;
+        $this->setup->villains++;
 
         // create special entity
         $special = SpecialEntity::create([
