@@ -19,15 +19,18 @@ class InvadeTheDailyBugleNewsHQ_PaintTheTownRed extends BaseHandler
     {
         $this->setup->twists = 8;
         $this->setup->heroes++;
+        $this->setup->henchmen++;
 
         // get a henchmen candidate
         $candidate = $this->es->getCandidate('henchmen');
 
         // add to deck
         $this->es->addToDeck(candidate: $candidate, section: 'heroes', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'henchmen', special: true);
 
         // add expectation
         $this->addExpectation(candidate: $candidate, section: 'heroes');
+        $this->addExpectation(candidate: $candidate, section: 'henchmen');
 
         // remove candidate
         $this->es->removeCandidate($candidate['id']);
