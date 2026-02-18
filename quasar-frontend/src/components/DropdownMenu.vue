@@ -63,6 +63,6 @@ import { computed, onMounted, ref } from "vue";
 const store = useStore();
 
 const permissions = computed(() => {
-  return store.user.permissions;
+  return store.user.permissions || [];
 });
 </script>

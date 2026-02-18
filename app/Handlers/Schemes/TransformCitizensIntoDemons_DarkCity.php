@@ -19,6 +19,7 @@ class TransformCitizensIntoDemons_DarkCity extends BaseHandler
     {
         $this->setup->twists = 8;
         $this->setup->bystanders = 0;
+        $this->setup->villains++;
 
         // get jean grey
         $jean = Hero::where('name', 'Jean Grey')
@@ -32,6 +33,7 @@ class TransformCitizensIntoDemons_DarkCity extends BaseHandler
 
         // add to deck
         $this->es->addToDeck(candidate: $candidate, section: 'villains', special: true);
+        $this->es->addToDeck(candidate: $candidate, section: 'heroes', special: true);
 
         // add expectation
         $this->addExpectation(candidate: $candidate, section: 'villains');
