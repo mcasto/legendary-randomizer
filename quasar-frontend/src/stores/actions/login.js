@@ -10,11 +10,14 @@ export default ({ email, password }) => {
     method: "post",
     payload: { email, password },
   }).then((response) => {
-    if (response.error) {
+    if (response?.error || !response?.user) {
       Notify.create({
         type: "negative",
-        message: `${response.error.status}: ${response.error.json.message}`,
+        message: response?.error
+          ? `${response.error.status ?? ""}: ${response.error.json?.message ?? "Server error"}`
+          : response?.message ?? "Login failed",
       });
+      return;
     }
 
     store.user = response.user;

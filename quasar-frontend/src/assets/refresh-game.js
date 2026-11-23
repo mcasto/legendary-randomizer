@@ -4,6 +4,8 @@ import { Notify } from "quasar";
 import { parseISO } from "date-fns";
 import wretch from "wretch";
 
+let pollTimer = null;
+
 export default async () => {
   const store = useStore();
 
@@ -26,7 +28,12 @@ export default async () => {
     // created: parseISO(response.game.created),
   };
 
-  setInterval(async () => {
+  // Only ever run one poller. This function runs every time the "/" route is
+  // entered (e.g. returning from /admin); without this each visit stacked
+  // another 1-second poller, multiplying requests and DB connections.
+  if (pollTimer) clearInterval(pollTimer);
+
+  pollTimer = setInterval(async () => {
     const response = await callApi({
       path: "/game",
       method: "get",
