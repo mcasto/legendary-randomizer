@@ -24,11 +24,15 @@ class AdminController extends Controller
         ]);
 
         if ($validated->fails()) {
-            return ['status' => 'error', 'message' => 'Invalid request'];
+            return ['status' => 'error', 'message' => 'Minimum players must be a whole number'];
         }
 
         $minPlayers = MinPlayer::where('scheme_id', $id)
             ->first();
+
+        if (!$minPlayers) {
+            return ['status' => 'error', 'message' => 'No minimum players record for this scheme'];
+        }
 
         $minPlayers->players = $validated->valid()['minPlayers'];
         $minPlayers->save();

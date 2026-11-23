@@ -19,13 +19,18 @@ const routes = [
         return;
       }
 
-      store.admin.schemes = await callApi({
-        path: "/schemes",
-        method: "get",
-        useAuth: true,
-      });
+      // Neither fetch may block entering admin; each section copes with
+      // missing data on its own.
+      const [schemes] = await Promise.all([
+        callApi({
+          path: "/schemes",
+          method: "get",
+          useAuth: true,
+        }).catch(() => null),
+        store.requiredHandlers(),
+      ]);
 
-      await store.requiredHandlers();
+      store.admin.schemes = Array.isArray(schemes) ? schemes : [];
     },
     meta: { requireAuth: true },
   },

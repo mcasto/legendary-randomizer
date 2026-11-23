@@ -3,6 +3,8 @@
     <q-select
       v-model="scheme"
       use-input
+      hide-selected
+      fill-input
       input-debounce="300"
       label="Select Scheme"
       :options="options"
@@ -10,6 +12,7 @@
       dense
       outlined
       @filter="filterFn"
+      @focus="(evt) => evt.target?.select?.()"
     >
       <template v-slot:no-option>
         <q-item>
@@ -48,6 +51,7 @@
 import callApi from "src/assets/call-api";
 import { useStore } from "src/stores/store";
 import { ref } from "vue";
+import { Notify } from "quasar";
 
 const store = useStore();
 
@@ -55,7 +59,9 @@ const scheme = ref(null);
 const options = ref(store.admin.schemes);
 
 function filterFn(val, update) {
-  if (!!!val) {
+  // with fill-input the box holds the selected name; opening the dropdown
+  // shouldn't filter down to just that one scheme
+  if (!val || val === scheme.value?.name) {
     update(() => {
       options.value = store.admin.schemes;
     });
@@ -76,6 +82,19 @@ const saveOptions = async () => {
     method: "put",
     payload: scheme.value,
     useAuth: true,
+    showError: false,
   });
+
+  if (response?.status === "success") {
+    Notify.create({
+      type: "positive",
+      message: `Saved ${scheme.value.name}`,
+    });
+  } else {
+    Notify.create({
+      type: "negative",
+      message: response?.message ?? "Save failed",
+    });
+  }
 };
 </script>

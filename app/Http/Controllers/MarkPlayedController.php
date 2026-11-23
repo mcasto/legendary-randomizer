@@ -32,4 +32,11 @@ class MarkPlayedController extends Controller
 
         return ['status' => 'success'];
     }
+
+    public function reset(Request $request)
+    {
+        $deleted = PlayedCount::where('data_id', $request->user()->data_id)->delete();
+
+        return ['status' => 'success', 'deleted' => $deleted];
+    }
 }

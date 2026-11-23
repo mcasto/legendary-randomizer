@@ -14,12 +14,16 @@
               v-for="permission of permissions"
               :key="permission.id"
               clickable
+              :disable="permission.disabled"
               :active="permission.level == section"
               @click="section = permission.level"
             >
               <q-item-section>
                 <q-item-label>
                   {{ permission.level.toUpperCase() }}
+                </q-item-label>
+                <q-item-label v-if="permission.disabled" caption>
+                  Unavailable
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -29,7 +33,9 @@
       <template #after>
         <div>
           <admin-schemes v-if="section == 'schemes'"></admin-schemes>
-          <admin-handlers v-if="section == 'handlers'"></admin-handlers>
+          <admin-handlers
+            v-if="section == 'handlers' && store.handlersRequired"
+          ></admin-handlers>
         </div>
       </template>
     </q-splitter>
@@ -48,10 +54,11 @@ const store = useStore();
 const section = ref("schemes");
 
 const permissions = computed(() => {
-  return store.user.permissions.map(({ permission_level }) => {
+  return (store.user?.permissions ?? []).map(({ permission_level }) => {
     return {
       id: uid(),
       level: permission_level,
+      disabled: permission_level == "handlers" && !store.handlersRequired,
     };
   });
 });

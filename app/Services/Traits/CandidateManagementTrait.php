@@ -83,14 +83,18 @@ trait CandidateManagementTrait
             return $candidate;
         });
 
-        // Sort by weighted random (using weight as probability multiplier)
-        $weightedCandidates = $weightedCandidates->shuffle()->sortByDesc(function ($candidate) {
-            // Generate random number weighted by play count
-            // Less played items get better random scores
-            return rand(1, 100) * $candidate->weight;
-        });
-
-        return $weightedCandidates;
+        // Weighted random sampling without replacement (Efraimidis–Spirakis):
+        // key = u^(1/w), sorted descending. The first item is picked with
+        // probability exactly proportional to its weight, and taking the top N
+        // is a proper weighted draw of N distinct items.
+        return $weightedCandidates
+            ->map(function ($candidate) {
+                $u = mt_rand(1, mt_getrandmax()) / mt_getrandmax(); // (0, 1]
+                $candidate->weightKey = $u ** (1 / $candidate->weight);
+                return $candidate;
+            })
+            ->sortByDesc('weightKey')
+            ->values();
     }
 
     /**
@@ -125,12 +129,18 @@ trait CandidateManagementTrait
             $query->where('name', 'NOT LIKE', '%Epic%');
         }
 
-        foreach ($query->get() as $entity) {
-            Candidate::create([
-                'setup_id' => $this->setup['id'],
-                'entity_type' => $entityType,
-                'entity_id' => $entity->id
-            ]);
+        $now = now();
+        $rows = $query->pluck('id')->map(fn($id) => [
+            'setup_id' => $this->setup['id'],
+            'entity_type' => $entityType,
+            'entity_id' => $id,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        // single multi-row insert instead of one INSERT per entity
+        foreach ($rows->chunk(500) as $chunk) {
+            Candidate::insert($chunk->values()->all());
         }
     }
 

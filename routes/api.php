@@ -89,6 +89,10 @@ Route::put('/mark-played', [MarkPlayedController::class, 'update'])
     ->middleware('auth:sanctum')
     ->name('mark-played');
 
+Route::delete('/played-counts', [MarkPlayedController::class, 'reset'])
+    ->middleware('auth:sanctum')
+    ->name('played-counts.reset');
+
 Route::get('/schemes', [AdminController::class, 'schemesIndex'])
     ->middleware('auth:sanctum');
 

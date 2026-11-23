@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
+use App\Models\HandlerLog;
 use App\Models\Setup;
 use App\Services\EntityService;
 use App\Services\OutputDeckService;
@@ -11,8 +13,14 @@ class BuildDeckController extends Controller
 {
     public function show(Request $request, int $numPlayers)
     {
-        // delete all setups for this data_id
-        Setup::where('data_id', $request->user()->data_id)->get()->each->delete();
+        // delete all setups for this data_id. Setups are soft-deleted, so the
+        // FK cascade never fires; clear the build-time scratch rows explicitly.
+        $oldSetupIds = Setup::where('data_id', $request->user()->data_id)->pluck('id');
+        if ($oldSetupIds->isNotEmpty()) {
+            Candidate::whereIn('setup_id', $oldSetupIds)->delete();
+            HandlerLog::whereIn('setup_id', $oldSetupIds)->delete();
+            Setup::whereIn('id', $oldSetupIds)->delete();
+        }
 
         $schemeID = $request->input('scheme') ?? null;
         $mastermindID = $request->input('mastermind') ?? null;

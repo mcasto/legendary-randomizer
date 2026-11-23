@@ -4,7 +4,7 @@
       Required Handlers
     </div>
 
-    <div v-if="!store.requiredHandlers" class="text-center q-pa-xl">
+    <div v-if="!store.handlersRequired" class="text-center q-pa-xl">
       There was an error retrieving the handlers.
     </div>
 
@@ -20,13 +20,13 @@
 
       <q-tab-panels v-model="tab">
         <q-tab-panel name="schemes">
-          <div v-if="store.requiredHandlers.schemes.length == 0">
+          <div v-if="store.handlersRequired.schemes.length == 0">
             No Required Handlers Found
           </div>
 
           <q-list dense separator v-else>
             <q-item
-              v-for="handler of store.requiredHandlers.schemes"
+              v-for="handler of store.handlersRequired.schemes"
               :key="handler.id"
             >
               <q-item-section>
@@ -38,13 +38,13 @@
           </q-list>
         </q-tab-panel>
         <q-tab-panel name="masterminds">
-          <div v-if="store.requiredHandlers.masterminds.length == 0">
+          <div v-if="store.handlersRequired.masterminds.length == 0">
             No Required Handlers Found
           </div>
 
           <q-list dense separator v-else>
             <q-item
-              v-for="handler of store.requiredHandlers.masterminds"
+              v-for="handler of store.handlersRequired.masterminds"
               :key="handler.id"
             >
               <q-item-section>
