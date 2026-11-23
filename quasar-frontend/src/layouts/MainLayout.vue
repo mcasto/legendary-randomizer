@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header>
+    <q-header v-if="showHeader">
       <div class="q-px-sm text-subtitle2 flex justify-between items-center">
         <div>
           <q-btn icon="menu" flat>
@@ -51,12 +51,20 @@
 <script setup>
 import { useStore } from "src/stores/store";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import DropdownMenu from "src/components/DropdownMenu.vue";
 import { Notify } from "quasar";
 import { differenceInMinutes } from "date-fns";
 import callApi from "src/assets/call-api";
 
 const store = useStore();
+
+const route = useRoute();
+
+// no toolbar on the auth screens
+const showHeader = computed(
+  () => !["/login", "/register"].includes(route.path)
+);
 
 const canLogout = computed(() => {
   return store.user;
