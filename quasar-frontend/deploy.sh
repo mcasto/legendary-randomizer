@@ -15,6 +15,7 @@ echo "Uploading..."
 rsync -avz --checksum \
   -e "ssh -i $SSH_KEY -p 65002" \
   --exclude=".DS_Store" \
+  --exclude=".htaccess" \
   dist/spa/ \
   "$SSH_USER@$SSH_HOST:$REMOTE_DIR/"
 
